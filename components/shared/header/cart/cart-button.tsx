@@ -9,9 +9,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { calcDiscountedPrice, priceFormat } from "@/lib/utils";
+import { currencyPrice } from "@/lib/utils";
 import Link from "next/link";
-import CartItem from "./cart-tiem";
+import CartItem from "./cart-item";
 
 export function CartButton() {
   const product = {
@@ -46,9 +46,7 @@ export function CartButton() {
           <div className="flex items-center justify-between w-full mt-4">
             <p className="text-muted-foreground">총 결제금액</p>
             <p className="font-bold">
-              {priceFormat(
-                calcDiscountedPrice(product.price, product.discount)
-              )}
+              {currencyPrice(product.price, product.discount)}
             </p>
           </div>
           <SheetClose asChild>

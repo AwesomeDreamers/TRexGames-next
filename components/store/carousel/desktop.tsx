@@ -1,4 +1,4 @@
-import { priceFormat } from "@/lib/utils";
+import { currencyPrice } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -92,7 +92,7 @@ export default function Desktop() {
                   가격
                 </p>
                 <p className="w-[20%] h-full flex items-center justify-center">
-                  {priceFormat(img.price)}
+                  {currencyPrice(img.price, 0)}
                 </p>
               </div>
               <div className="absolute bottom-0 w-full h-16 bg-[#0009] z-10 rounded-bl-2xl rounded-br-2xl"></div>

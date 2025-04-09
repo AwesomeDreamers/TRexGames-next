@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import { calcDiscountedPrice, priceFormat } from "@/lib/utils";
+import { currencyPrice, originalPrice } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -38,13 +38,9 @@ export default function ProductCard() {
             <Badge className="bg-[#26bbff]">-25%</Badge>
             <div>
               <p className="text-muted-foreground line-through">
-                {priceFormat(product.price)}
+                {originalPrice(product.price)}
               </p>
-              <p>
-                {priceFormat(
-                  calcDiscountedPrice(product.price, product.discount)
-                )}
-              </p>
+              <p>{currencyPrice(product.price, product.discount)}</p>
             </div>
           </div>
           <div className="flex justify-between items-center">

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import QtyButton from "@/components/ui/qty-button";
-import { calcDiscountedPrice, priceFormat } from "@/lib/utils";
+import { currencyPrice, originalPrice } from "@/lib/utils";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 
@@ -25,12 +25,10 @@ export default function CartItem({ product }: any) {
           <QtyButton />
           <div className="flex flex-col">
             <p className="text-muted-foreground line-through text-sm text-right ml-2">
-              {priceFormat(product.price)}
+              {originalPrice(product.price)}
             </p>
             <p className="ml-2">
-              {priceFormat(
-                calcDiscountedPrice(product.price, product.discount)
-              )}
+              {currencyPrice(product.price, product.discount)}
             </p>
           </div>
         </div>
