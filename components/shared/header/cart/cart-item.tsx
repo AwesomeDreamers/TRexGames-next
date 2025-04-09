@@ -8,7 +8,7 @@ export default function CartItem({ product }: any) {
   return (
     <div className="w-full bg-[#28282c] flex items-center p-4 rounded-xl">
       <div className="w-[30%]">
-        <Image src={product.src} width={60} height={85} alt={product.alt} />
+        <Image src={product.banner} width={60} height={85} alt={product.alt} />
       </div>
       <div className="w-[70%] flex flex-col items-start">
         <div className="flex items-center justify-between w-full">

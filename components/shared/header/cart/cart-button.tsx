@@ -9,20 +9,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { product } from "@/lib/constants";
 import { currencyPrice } from "@/lib/utils";
 import Link from "next/link";
 import CartItem from "./cart-item";
 
 export function CartButton() {
-  const product = {
-    id: 6,
-    src: "/swiper/6-1.avif",
-    alt: "Image 6",
-    genre: "액션",
-    title: "몬스터 헌터 와일즈",
-    price: 84800,
-    discount: 25,
-  };
   return (
     <Sheet>
       <SheetTrigger asChild>
