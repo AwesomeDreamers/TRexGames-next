@@ -64,3 +64,50 @@ export const product = {
     directx: "버전 11",
   },
 };
+
+export const category = [
+  {
+    id: 1,
+    category: "액션",
+  },
+  {
+    id: 2,
+    category: "RPG",
+  },
+  {
+    id: 3,
+    category: "어드벤처",
+  },
+  {
+    id: 4,
+    category: "스포츠",
+  },
+  {
+    id: 5,
+    category: "캐주얼",
+  },
+  {
+    id: 6,
+    category: "전략",
+  },
+  {
+    id: 7,
+    category: "FPS",
+  },
+  {
+    id: 8,
+    category: "퍼즐",
+  },
+  {
+    id: 9,
+    category: "생존",
+  },
+  {
+    id: 10,
+    category: "호러",
+  },
+];
+export const platform = [
+  { id: 1, platform: "스팀" },
+  { id: 2, platform: "에픽" },
+];
