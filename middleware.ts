@@ -1,21 +1,36 @@
 import { NextResponse } from "next/server";
 import { auth } from "./auth";
 
+const protectedPaths = ["/user"];
+const adminPaths = ["/admin", "/admin/:path*"];
+const publicRoutes = ["/login", "/signup", "/reset-password"];
+
 export default auth((req) => {
   const { pathname } = req.nextUrl;
-  const session = !!req.auth;
+  const isSession = !!req.auth;
   const role = req.auth?.user.role || "guest";
 
-  const protectedPaths = [/\/user\/(.*)/];
-  const adminPaths = [/\/admin\/(.*)/];
+  const isProtectedPaths = protectedPaths.some((p) => pathname.startsWith(p));
+  const isAdminPaths = adminPaths.some((p) => pathname.startsWith(p));
+  const isPublicRoutes = publicRoutes.some(
+    (p) => pathname.startsWith(p) || p === "/"
+  );
 
-  if (!session && protectedPaths.some((p) => p.test(pathname))) {
+  if (!isSession && isProtectedPaths) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (role !== "ADMIN" && adminPaths.some((p) => p.test(pathname))) {
+  if (role !== "ADMIN" && isAdminPaths) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  if (isSession && isPublicRoutes) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
   return NextResponse.next();
 });
+
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
