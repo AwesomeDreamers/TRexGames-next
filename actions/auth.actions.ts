@@ -25,7 +25,7 @@ export const emailVerify = async (email: string) => {
 export const sendEmail = async (email: string, type: "signup" | "reset") => {
   const url =
     type === "signup"
-      ? `${SERVER_URL}/auth/send-register-email`
+      ? `${SERVER_URL}/auth/send-signup-email`
       : `${SERVER_URL}/auth/send-reset-password-email`;
   const response = await axios.post(url, {
     email,
