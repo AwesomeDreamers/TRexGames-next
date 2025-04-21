@@ -1,7 +1,10 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useCheckVerifyToken, useResetPassword } from "@/hooks/query/use-auth";
+import {
+  useCheckVerifyToken,
+  useResetPassword,
+} from "@/hooks/query/auth.queries";
 import { ResetPasswordFormType } from "@/type/auth.type";
 import { ResetPasswordFormSchema } from "@/validation/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
