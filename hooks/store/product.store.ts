@@ -13,15 +13,15 @@ export const useAddProductStore = create<AddProductState>((set) => ({
 }));
 
 type OpenProductState = {
-  id?: string;
+  id?: number;
   isOpen: boolean;
-  onOpen: (id: string) => void;
+  onOpen: (id: number) => void;
   onClose: () => void;
 };
 
 export const useOpenProductStore = create<OpenProductState>((set) => ({
   id: undefined,
   isOpen: false,
-  onOpen: (id: string) => set({ id, isOpen: true }),
+  onOpen: (id: number) => set({ id, isOpen: true }),
   onClose: () => set({ isOpen: false, id: undefined }),
 }));
