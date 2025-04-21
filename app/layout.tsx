@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
 import QueryProvider from "@/provider/query-provider";
+import SheetProvider from "@/provider/sheet-provider";
 import "@/style/globals.css";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
@@ -28,7 +29,10 @@ export default async function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.variable} font-pretendard`}>
         <SessionProvider session={session}>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <SheetProvider />
+            {children}
+          </QueryProvider>
           <Toaster />
         </SessionProvider>
       </body>
