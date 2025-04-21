@@ -1,0 +1,36 @@
+"use server";
+import { SERVER_URL } from "@/constants/common";
+import { ProductFormType } from "@/type/product.type";
+import axios from "axios";
+import { auth } from "../auth";
+
+export async function createProduct(values: ProductFormType) {
+  const session = await auth();
+  const token = session?.serverTokens.access_token;
+  const data = {
+    ...values,
+    price: Number(values.price),
+    discount: Number(values.discount),
+    platformId: Number(values.platformId),
+    categoryId: Number(values.categoryId),
+  };
+  const response = await axios.post(`${SERVER_URL}/product/create`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const { status, message, payload } = response.data;
+  return { status, message, payload };
+}
+
+export async function findProductsAll() {
+  const response = await axios.get(`${SERVER_URL}/product`);
+  const { status, message, payload } = response.data;
+  return { status, message, payload };
+}
+
+export async function findProductById(id: number) {
+  const response = await axios.get(`${SERVER_URL}/product/${id}`);
+  const { status, message, payload } = response.data;
+  return { status, message, payload };
+}

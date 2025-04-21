@@ -1,3 +1,5 @@
+import Header from "@/components/shared/header/header";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -5,7 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <main>
-      {/* Header */}
+      <Header />
       {children}
       {/* Footer */}
     </main>

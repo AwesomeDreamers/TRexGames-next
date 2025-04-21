@@ -10,6 +10,7 @@ import {
   Printer,
   SendToBack,
   Settings,
+  Upload,
 } from "lucide-react";
 
 export type Icon = typeof LucidIcon;
@@ -102,4 +103,5 @@ export const Icon = {
   adminAddCoupon: ListOrdered,
   adminSettings: Settings,
   adminLogout: LogOut,
+  adminUpload: Upload,
 };
