@@ -1,14 +1,11 @@
 import {
   ChevronLeft,
   ChevronRight,
-  FileText,
-  ListOrdered,
   LogOut,
   LucideProps,
   Icon as LucidIcon,
   Package,
-  Printer,
-  SendToBack,
+  Plus,
   Settings,
   Upload,
 } from "lucide-react";
@@ -97,10 +94,38 @@ export const Icon = {
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   adminProducts: Package,
-  adminAddProduct: Printer,
-  adminOrders: SendToBack,
-  adminCoupons: FileText,
-  adminAddCoupon: ListOrdered,
+  adminAddProduct: Plus,
+  adminOrders: ({ ...props }: LucideProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="1em"
+      height="1em"
+      {...props}
+    >
+      <g fill="none" fillRule="evenodd">
+        <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"></path>
+        <path
+          fill="currentColor"
+          d="M3 5.5A2.5 2.5 0 0 1 5.5 3H18a3 3 0 0 1 3 3v14a1 1 0 0 1-1.524.852l-2.726-1.678l-2.726 1.678a1 1 0 0 1-1.048 0l-2.726-1.678l-2.726 1.678A1 1 0 0 1 6 20v-6H4a1 1 0 0 1-1-1zm5 12.71l1.726-1.062a1 1 0 0 1 1.048 0l2.726 1.678l2.726-1.678a1 1 0 0 1 1.048 0L19 18.21V6a1 1 0 0 0-1-1H7.95q.05.243.05.5zM5.5 5a.5.5 0 0 0-.5.5V12h1V5.5a.5.5 0 0 0-.5-.5M10 9a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2h-5a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1"
+        ></path>
+      </g>
+    </svg>
+  ),
+  adminCoupons: ({ ...props }: LucideProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="1em"
+      height="1em"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M2.005 4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v5.5a2.5 2.5 0 0 0 0 5V20a1 1 0 0 1-1 1h-18a1 1 0 0 1-1-1zM8.09 19a1.5 1.5 0 0 1 2.83 0h9.085v-2.968a4.5 4.5 0 0 1 0-8.064V5H10.92a1.5 1.5 0 0 1-2.83 0H4.005v14zm1.415-8a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3m0 5a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3"
+      ></path>
+    </svg>
+  ),
   adminSettings: Settings,
   adminLogout: LogOut,
   adminUpload: Upload,

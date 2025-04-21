@@ -13,32 +13,27 @@ interface SidebarProps {
 
 const menuItems = [
   {
-    name: "Products",
+    name: "상품",
     icon: Icon.adminProducts,
     href: "/admin/products",
   },
   {
-    name: "Add Product",
-    icon: Icon.adminAddProduct,
-    href: "/admin/products/add",
-  },
-  {
-    name: "Orders",
+    name: "주문",
     icon: Icon.adminOrders,
     href: "/admin/orders",
   },
   {
-    name: "Add Coupon",
-    icon: Icon.adminAddCoupon,
-    href: "/admin/coupons/add",
+    name: "쿠폰",
+    icon: Icon.adminCoupons,
+    href: "/admin/coupons",
   },
   {
-    name: "Settings",
+    name: "세팅",
     icon: Icon.adminSettings,
     href: "/admin/settings",
   },
   {
-    name: "Logout",
+    name: "로그아웃",
     icon: Icon.adminLogout,
     href: "",
   },
