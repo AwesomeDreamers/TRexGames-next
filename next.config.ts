@@ -3,6 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: false,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "500mb",
+    },
+  },
   images: {
     remotePatterns: [
       {
@@ -12,6 +17,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: "k.kakaocdn.net",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
       },
     ],
   },
