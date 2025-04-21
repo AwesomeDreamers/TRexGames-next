@@ -1,12 +1,17 @@
 import {
+  ArrowDown,
   ChevronLeft,
   ChevronRight,
+  Edit2,
+  Loader2,
   LogOut,
   LucideProps,
   Icon as LucidIcon,
+  MoreHorizontal,
   Package,
   Plus,
   Settings,
+  Trash2,
   Upload,
 } from "lucide-react";
 
@@ -93,6 +98,11 @@ export const Icon = {
   ),
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
+  arrowDown: ArrowDown,
+  loading: Loader2,
+  trash: Trash2,
+  moreHorizontal: MoreHorizontal,
+  edit: Edit2,
   adminProducts: Package,
   adminAddProduct: Plus,
   adminOrders: ({ ...props }: LucideProps) => (
