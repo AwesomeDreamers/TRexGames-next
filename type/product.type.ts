@@ -16,3 +16,11 @@ export type ProductType = z.infer<typeof ProductFormSchema> & {
   createdAt: string;
   updatedAt: string;
 };
+
+export type ProductImageType = {
+  id: number;
+  url: string;
+  productId: number;
+  createdAt: string;
+  updatedAt: string;
+};

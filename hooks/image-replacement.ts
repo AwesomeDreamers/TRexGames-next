@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function useQuillImageReplacement() {
   const [urlArray, setUrlArray] = useState<string[]>([]);
 
-  const replaceImages = async (content: string) => {
+  const replaceImages = async (content: string, slug: string) => {
     const srcArray: string[] = [];
     const gainSource = /<img[^>]*src\s*=\s*["']?([^>"']+)["']?[^>]*>/g;
     let endContent = content;
@@ -17,7 +17,7 @@ export default function useQuillImageReplacement() {
       srcArray.push(result);
     }
 
-    const requestData = { urls: srcArray };
+    const requestData = { urls: srcArray, slug };
 
     try {
       const urls = await changePathContentImage(requestData);

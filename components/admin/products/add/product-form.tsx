@@ -30,10 +30,10 @@ import { ProductFormSchema } from "@/validation/product.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 interface ProductFormProps {
-  id?: string;
+  id?: number;
   onSubmit: (data: ProductFormType) => void;
   defaultValues?: ProductFormType;
   disabled?: boolean;
@@ -48,7 +48,7 @@ export default function ProductForm({
   onSubmit,
   disabled,
 }: ProductFormProps) {
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>(defaultValues?.images || []);
   const { replaceImages } = useQuillImageReplacement();
   const form = useForm<ProductFormType>({
     resolver: zodResolver(ProductFormSchema),
@@ -61,15 +61,16 @@ export default function ProductForm({
     useFindPlatformAll();
 
   const handleSubmit = async (values: ProductFormType) => {
+    console.log("함수 호출 왜 안돼 ?", values);
+
     if (images.length > 0) {
       values.images = [...images];
     }
     if (values.description) {
-      values.description = await replaceImages(values.description);
+      values.description = await replaceImages(values.description, values.slug);
     }
     onSubmit(values);
   };
-
   const handleImageRemove = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
@@ -83,11 +84,17 @@ export default function ProductForm({
         formData.append("file", file);
         const data = await imageUpload(formData);
         newImages.push(data);
-
         setImages((prev) => [...prev, ...newImages]);
       }
     }
   };
+  useEffect(() => console.log("images", images), [images]);
+
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset(defaultValues);
+    }
+  }, [defaultValues, form]);
 
   if (CategoryLoading || PlatformLoading)
     return (
@@ -130,10 +137,16 @@ export default function ProductForm({
       </div>
     );
 
+  const { errors } = form.formState;
+  console.log("Form errors:", errors);
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log("폼 제출 이벤트 발생");
+          form.handleSubmit(handleSubmit)(e);
+        }}
         className="grid gap-6 md:grid-cols-2 lg:grid-cols-1"
       >
         <div className="grid grid-cols-2 place-content-center place-items-center gap-4 md:flex md:items-center md:flex-wrap md:place-content-start">
@@ -185,9 +198,12 @@ export default function ProductForm({
                       placeholder="상품 이름"
                       className="mt-1.5"
                       {...field}
+                      value={field.value || ""}
                       onChange={(e) => {
                         field.onChange(e);
-                        const slugValue = e.target.value.replace(/\s+/g, "-");
+                        const slugValue = e.target.value
+                          .replace(/\s+/g, "-")
+                          .replace(/:/g, "");
                         form.setValue("slug", slugValue);
                       }}
                     />
@@ -566,7 +582,7 @@ export default function ProductForm({
               </div>
             </div>
           </div>
-          <Button disabled={disabled} className="mt-1.5 w-full">
+          <Button type="submit" disabled={disabled} className="mt-1.5 w-full">
             {id ? "수정" : "등록"}
           </Button>
         </div>

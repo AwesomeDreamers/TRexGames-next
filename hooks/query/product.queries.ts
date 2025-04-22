@@ -1,5 +1,11 @@
 "use client";
-import { createProduct, findProductsAll } from "@/actions/product.actions";
+import {
+  createProduct,
+  findProductById,
+  findProductsAll,
+  updateProduct,
+} from "@/actions/product.actions";
+import { ProductFormType } from "@/type/product.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useFindProductsAll() {
@@ -21,3 +27,31 @@ export function useCreateProduct() {
 
   return mutation;
 }
+
+export const useFindProductById = (id?: number) => {
+  const query = useQuery({
+    enabled: !!id,
+    queryKey: ["product", { id }],
+    queryFn: async () => {
+      const response = await findProductById(id);
+      return response.payload;
+    },
+  });
+  return query;
+};
+
+export const useUpdateProduct = (id?: number) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async (data: ProductFormType) => {
+      const response = await updateProduct(data, id);
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["product", { id }],
+      });
+    },
+  });
+  return mutation;
+};

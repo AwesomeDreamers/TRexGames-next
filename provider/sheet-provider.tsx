@@ -1,6 +1,7 @@
 "use client";
 
 import { AddProductSheet } from "@/components/admin/products/add/add-product-sheet";
+import { EditProductSheet } from "@/components/admin/products/add/edit-product-sheet";
 import { useEffect, useState } from "react";
 
 export default function SheetProvider() {
@@ -10,6 +11,7 @@ export default function SheetProvider() {
   if (!mounted) return null;
   return (
     <>
+      <EditProductSheet />
       <AddProductSheet />
     </>
   );

@@ -28,6 +28,7 @@ export function AddProductSheet() {
       },
     });
   }
+
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="">
@@ -45,8 +46,8 @@ export function AddProductSheet() {
                   slug: "",
                   description: "",
                   price: "0",
-                  platformId: "0",
-                  categoryId: "0",
+                  platformId: "",
+                  categoryId: "",
                   discount: "0",
                   minSpec: {
                     cpu: "",
