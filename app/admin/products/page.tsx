@@ -4,7 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import { Icon } from "@/components/ui/icon";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useFindProductsAll } from "@/hooks/query/product.queries";
+import {
+  useDeleteProducts,
+  useFindProductsAll,
+} from "@/hooks/query/product.queries";
 import { useAddProductStore } from "@/hooks/store/product.store";
 import { toast } from "sonner";
 import { columns } from "./column";
@@ -12,6 +15,7 @@ import { columns } from "./column";
 export default function AdminProductPage() {
   const { onOpen } = useAddProductStore();
   const { data, isLoading, isError, error } = useFindProductsAll();
+  const deleteProducts = useDeleteProducts();
   const ProductList = data?.payload;
 
   if (isError) {
@@ -52,15 +56,19 @@ export default function AdminProductPage() {
         <CardContent>
           <DataTable
             columns={columns}
+            filterKey="name"
             data={ProductList ?? []}
-            // filterKey={"name"}
-            // onDelete={(row) => {
-            //   const ids = row
-            //     .map((r) => r.original.id)
-            //     .filter((id): id is string => id !== undefined);
-            //   deleteAccounts.mutate(ids);
-            // }}
-            // disabled={findAccountAll.isLoading || deleteAccounts.isPending}
+            onDelete={(row) => {
+              const ids = row
+                .map((r) => r.original.id)
+                .filter((id): id is number => id !== undefined);
+              deleteProducts.mutate(ids, {
+                onSuccess: () => {
+                  toast.success(data?.message);
+                },
+              });
+            }}
+            disabled={isLoading}
           />
         </CardContent>
       </Card>

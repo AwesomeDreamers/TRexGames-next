@@ -55,3 +55,27 @@ export async function updateProduct(values: ProductFormType, id?: number) {
   const { status, message, payload } = response.data;
   return { status, message, payload };
 }
+
+export async function deleteProducts(ids: number[]) {
+  const session = await auth();
+  const token = session?.serverTokens.access_token;
+  const response = await axios.delete(`${SERVER_URL}/product`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: ids,
+  });
+  const { status, message, payload } = response.data;
+  return { status, message, payload };
+}
+
+export async function deleteProduct(id?: number) {
+  const session = await auth();
+  const token = session?.serverTokens.access_token;
+  const response = await axios.delete(`${SERVER_URL}/product/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}

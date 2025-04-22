@@ -3,6 +3,7 @@
 import {
   ColumnDef,
   ColumnFiltersState,
+  Row,
   SortingState,
   VisibilityState,
   flexRender,
@@ -27,16 +28,27 @@ import {
 
 import { Pagination } from "@/app/admin/products/pagination";
 import { Toolbar } from "@/app/admin/products/toolbar";
+import { useConfirm } from "@/hooks/use-confirm";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filterKey: string;
+  onDelete: (rows: Row<TData>[]) => void;
+  disabled?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filterKey,
+  onDelete,
+  disabled,
 }: DataTableProps<TData, TValue>) {
+  const [ConfirmDialog, confirm] = useConfirm(
+    "정말로 삭제하시겠습니까?",
+    "삭제된 데이터는 복구할 수 없습니다."
+  );
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -69,7 +81,12 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <Toolbar table={table} />
+      <Toolbar
+        table={table}
+        filterKey={filterKey}
+        onDelete={onDelete}
+        disabled={disabled}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
