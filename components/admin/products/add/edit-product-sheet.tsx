@@ -20,9 +20,6 @@ export function EditProductSheet() {
   const findProductById = useFindProductById(id);
 
   function onSubmit(values: ProductFormType) {
-    console.log("products add page values", values);
-    console.log("함수호출 확인");
-
     updateProduct.mutate(values, {
       onSuccess: (data) => {
         toast.success(data.message);
@@ -95,7 +92,7 @@ export function EditProductSheet() {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent>
+      <SheetContent className="lg:max-w-7xl">
         <div className="p-6">
           <div className="flex flex-col gap-6">
             <SheetHeader className="flex items-center justify-between">

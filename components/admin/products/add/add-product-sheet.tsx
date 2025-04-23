@@ -15,7 +15,6 @@ export function AddProductSheet() {
   const createProduct = useCreateProduct();
   const { isOpen, onClose } = useAddProductStore();
   function onSubmit(values: ProductFormType) {
-    console.log("products add page values", values);
     createProduct.mutate(values, {
       onSuccess: (data) => {
         toast.success(data.message);
@@ -31,7 +30,7 @@ export function AddProductSheet() {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="">
+      <SheetContent className="lg:max-w-7xl">
         <div className="p-6">
           <div className="flex flex-col gap-6">
             <SheetHeader className="flex items-center justify-between">
