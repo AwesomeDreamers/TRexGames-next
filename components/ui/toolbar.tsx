@@ -9,6 +9,7 @@ import { ViewOptions } from "./view-options";
 
 import { Icon } from "@/components/ui/icon";
 import { useConfirm } from "@/hooks/use-confirm";
+import { usePathname } from "next/navigation";
 import { FacetedFilter } from "./faceted-filter";
 
 interface ToolbarProps<TData> {
@@ -69,6 +70,7 @@ export function Toolbar<TData>({
     "정말로 삭제하시겠습니까?",
     "삭제된 데이터는 복구할 수 없습니다."
   );
+  const pathname = usePathname();
 
   return (
     <div className="flex items-center justify-between">
@@ -82,20 +84,22 @@ export function Toolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn("category") && (
-          <FacetedFilter
-            column={table.getColumn("category")}
-            title="카테고리"
-            options={categories}
-          />
-        )}
-        {table.getColumn("platform") && (
-          <FacetedFilter
-            column={table.getColumn("platform")}
-            title="플랫폼"
-            options={platforms}
-          />
-        )}
+        {pathname.startsWith("/admin/products") &&
+          table.getColumn("category") && (
+            <FacetedFilter
+              column={table.getColumn("category")}
+              title="카테고리"
+              options={categories}
+            />
+          )}
+        {pathname.startsWith("/admin/products") &&
+          table.getColumn("platform") && (
+            <FacetedFilter
+              column={table.getColumn("platform")}
+              title="플랫폼"
+              options={platforms}
+            />
+          )}
         {isFiltered && (
           <Button
             variant="ghost"
