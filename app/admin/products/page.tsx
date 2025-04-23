@@ -63,7 +63,7 @@ export default function AdminProductPage() {
                 .map((r) => r.original.id)
                 .filter((id): id is number => id !== undefined);
               deleteProducts.mutate(ids, {
-                onSuccess: () => {
+                onSuccess: (data) => {
                   toast.success(data?.message);
                 },
               });

@@ -5,8 +5,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { currencyPrice } from "@/lib/utils";
 import { ProductType } from "@/type/product.type";
+import { ColumnHeader } from "../../../components/ui/column-header";
 import Actions from "./actions";
-import { ColumnHeader } from "./column-header";
 
 export const categories = [
   {

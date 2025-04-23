@@ -90,7 +90,7 @@ export const useDeleteProduct = (id?: number) => {
       toast.success(data.message);
     },
     onError: () => {
-      toast.error("계좌 삭제에 실패했습니다.");
+      toast.error("상품 삭제에 실패했습니다.");
     },
   });
   return mutation;

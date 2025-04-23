@@ -30,7 +30,7 @@ export async function findProductsAll() {
 }
 
 export async function findProductById(id?: number) {
-  const response = await axios.get(`${SERVER_URL}/product/${id}`);
+  const response = await axios.get(`${SERVER_URL}/product/all${id}`);
   const { status, message, payload } = response.data;
   return { status, message, payload };
 }
@@ -59,7 +59,7 @@ export async function updateProduct(values: ProductFormType, id?: number) {
 export async function deleteProducts(ids: number[]) {
   const session = await auth();
   const token = session?.serverTokens.access_token;
-  const response = await axios.delete(`${SERVER_URL}/product`, {
+  const response = await axios.delete(`${SERVER_URL}/product/deletes`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -72,7 +72,7 @@ export async function deleteProducts(ids: number[]) {
 export async function deleteProduct(id?: number) {
   const session = await auth();
   const token = session?.serverTokens.access_token;
-  const response = await axios.delete(`${SERVER_URL}/product/${id}`, {
+  const response = await axios.delete(`${SERVER_URL}/product/delete/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

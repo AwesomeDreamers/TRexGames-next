@@ -1,5 +1,6 @@
 import {
   ArrowDown,
+  Calendar,
   ChevronLeft,
   ChevronRight,
   Edit2,
@@ -139,4 +140,5 @@ export const Icon = {
   adminSettings: Settings,
   adminLogout: LogOut,
   adminUpload: Upload,
+  calendar: Calendar,
 };

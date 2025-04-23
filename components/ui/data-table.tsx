@@ -26,8 +26,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Pagination } from "@/app/admin/products/pagination";
-import { Toolbar } from "@/app/admin/products/toolbar";
+import { Pagination } from "@/components/ui/pagination";
+import { Toolbar } from "@/components/ui/toolbar";
 import { useConfirm } from "@/hooks/use-confirm";
 
 interface DataTableProps<TData, TValue> {
