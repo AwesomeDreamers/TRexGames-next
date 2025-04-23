@@ -30,7 +30,7 @@ import { ProductFormSchema } from "@/validation/product.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 interface ProductFormProps {
   id?: number;
@@ -61,8 +61,6 @@ export default function ProductForm({
     useFindPlatformAll();
 
   const handleSubmit = async (values: ProductFormType) => {
-    console.log("함수 호출 왜 안돼 ?", values);
-
     if (images.length > 0) {
       values.images = [...images];
     }
@@ -88,14 +86,6 @@ export default function ProductForm({
       }
     }
   };
-  useEffect(() => console.log("images", images), [images]);
-
-  useEffect(() => {
-    if (defaultValues) {
-      form.reset(defaultValues);
-    }
-  }, [defaultValues, form]);
-
   if (CategoryLoading || PlatformLoading)
     return (
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
@@ -142,11 +132,7 @@ export default function ProductForm({
   return (
     <Form {...form}>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log("폼 제출 이벤트 발생");
-          form.handleSubmit(handleSubmit)(e);
-        }}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="grid gap-6 md:grid-cols-2 lg:grid-cols-1"
       >
         <div className="grid grid-cols-2 place-content-center place-items-center gap-4 md:flex md:items-center md:flex-wrap md:place-content-start">

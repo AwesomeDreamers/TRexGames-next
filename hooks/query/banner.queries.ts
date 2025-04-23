@@ -1,64 +1,64 @@
 import {
-  createCoupon,
-  deleteCoupon,
-  deleteCoupons,
-  findCouponsAll,
-} from "@/actions/coupon.actions";
+  createBanner,
+  deleteBanner,
+  deleteBanners,
+  findBannersAll,
+} from "@/actions/banner.actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function useFindCouponsAll() {
+export function useFindBannersAll() {
   const query = useQuery({
-    queryKey: ["coupons"],
-    queryFn: findCouponsAll,
+    queryKey: ["banners"],
+    queryFn: findBannersAll,
   });
   return query;
 }
 
-export function useCreateCoupon() {
+export function useCreateBanner() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: createCoupon,
+    mutationFn: createBanner,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["coupons"] });
+      queryClient.invalidateQueries({ queryKey: ["banners"] });
     },
   });
 
   return mutation;
 }
 
-export const useDeleteCoupons = () => {
+export const useDeleteBanners = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (ids: number[]) => {
-      const response = await deleteCoupons(ids);
+      const response = await deleteBanners(ids);
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["coupons"] });
+      queryClient.invalidateQueries({ queryKey: ["banners"] });
     },
   });
   return mutation;
 };
 
-export const useDeleteCoupon = (id?: number) => {
+export const useDeleteBanner = (id?: number) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await deleteCoupon(id);
+      const response = await deleteBanner(id);
       return response;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["coupon", { id }],
+        queryKey: ["banner", { id }],
       });
       queryClient.invalidateQueries({
-        queryKey: ["coupons"],
+        queryKey: ["banners"],
       });
       toast.success(data.message);
     },
     onError: () => {
-      toast.error("쿠폰 삭제에 실패했습니다.");
+      toast.error("배너 삭제에 실패했습니다.");
     },
   });
   return mutation;

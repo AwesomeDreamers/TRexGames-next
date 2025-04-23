@@ -5,17 +5,17 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useCreateCoupon } from "@/hooks/query/coupon.queries";
-import { useAddCouponStore } from "@/hooks/store/coupon.store";
-import { CouponFormType } from "@/type/coupon.type";
+import { useCreateBanner } from "@/hooks/query/banner.queries";
+import { useAddBannerStore } from "@/hooks/store/banner.store";
+import { BannerFormType } from "@/type/banner.type";
 import { toast } from "sonner";
-import CouponForm from "./coupon-form";
+import BannerForm from "./banner-form";
 
-export function AddCouponSheet() {
-  const { isOpen, onClose } = useAddCouponStore();
-  const createCoupon = useCreateCoupon();
-  function onSubmit(values: CouponFormType) {
-    createCoupon.mutate(values, {
+export function AddBannerSheet() {
+  const { isOpen, onClose } = useAddBannerStore();
+  const createBanner = useCreateBanner();
+  function onSubmit(values: BannerFormType) {
+    createBanner.mutate(values, {
       onSuccess: (data) => {
         toast.success(data.message);
         onClose();
@@ -34,17 +34,15 @@ export function AddCouponSheet() {
         <div className="p-6">
           <div className="flex flex-col gap-6">
             <SheetHeader className="flex items-center justify-between">
-              <SheetTitle>쿠폰 등록</SheetTitle>
+              <SheetTitle>배너 등록</SheetTitle>
             </SheetHeader>
-            <CouponForm
+            <BannerForm
               onSubmit={onSubmit}
-              disabled={createCoupon.isPending}
+              disabled={createBanner.isPending}
               defaultValues={{
-                startDate: new Date(),
-                endDate: new Date(),
-                discount: "0",
-                code: "",
-                usageLimit: "0",
+                title: "",
+                link: "",
+                image: "",
               }}
             />
           </div>

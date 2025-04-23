@@ -24,13 +24,13 @@ export async function createProduct(values: ProductFormType) {
 }
 
 export async function findProductsAll() {
-  const response = await axios.get(`${SERVER_URL}/product`);
+  const response = await axios.get(`${SERVER_URL}/product/all`);
   const { status, message, payload } = response.data;
   return { status, message, payload };
 }
 
 export async function findProductById(id?: number) {
-  const response = await axios.get(`${SERVER_URL}/product/all${id}`);
+  const response = await axios.get(`${SERVER_URL}/product/${id}`);
   const { status, message, payload } = response.data;
   return { status, message, payload };
 }

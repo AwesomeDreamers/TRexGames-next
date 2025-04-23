@@ -28,9 +28,9 @@ const menuItems = [
     href: "/admin/coupons",
   },
   {
-    name: "세팅",
-    icon: Icon.adminSettings,
-    href: "/admin/settings",
+    name: "배너",
+    icon: Icon.adminBanners,
+    href: "/admin/banners",
   },
   {
     name: "로그아웃",

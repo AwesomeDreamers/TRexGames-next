@@ -1,5 +1,6 @@
 "use client";
 
+import { AddBannerSheet } from "@/components/admin/banners/add/add-banner-sheet";
 import { AddCouponSheet } from "@/components/admin/coupons/add/add-coupon-sheet";
 import { AddProductSheet } from "@/components/admin/products/add/add-product-sheet";
 import { EditProductSheet } from "@/components/admin/products/add/edit-product-sheet";
@@ -15,6 +16,7 @@ export default function SheetProvider() {
       <EditProductSheet />
       <AddProductSheet />
       <AddCouponSheet />
+      <AddBannerSheet />
     </>
   );
 }
