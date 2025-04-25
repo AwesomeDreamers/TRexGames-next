@@ -13,6 +13,11 @@ export type ProductType = z.infer<typeof ProductFormSchema> & {
     name: string;
   };
   rating: number;
+  images: {
+    id: number;
+    url: string;
+  }[];
+  numReviews: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -23,4 +28,14 @@ export type ProductImageType = {
   productId: number;
   createdAt: string;
   updatedAt: string;
+};
+
+export type ProductQueryType = {
+  categories?: string[];
+  platforms?: string[];
+  priceRange?: [number, number];
+  page?: number;
+  sortBy?: string;
+  name?: string;
+  sortOrder?: "asc" | "desc";
 };

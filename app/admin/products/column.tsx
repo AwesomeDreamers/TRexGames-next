@@ -3,50 +3,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { categories, platforms } from "@/constants/product.contstant";
 import { currencyPrice } from "@/lib/utils";
 import { ProductType } from "@/type/product.type";
 import { ColumnHeader } from "../../../components/ui/column-header";
 import Actions from "./actions";
-
-export const categories = [
-  {
-    name: "액션",
-  },
-  {
-    name: "RPG",
-  },
-  {
-    name: "어드벤처",
-  },
-  {
-    name: "FPS",
-  },
-  { name: "캐주얼" },
-  {
-    name: "전략",
-  },
-  {
-    name: "호러",
-  },
-  {
-    name: "서바이벌",
-  },
-  {
-    name: "퍼즐",
-  },
-  {
-    name: "스포츠",
-  },
-];
-
-export const platforms = [
-  {
-    name: "스팀",
-  },
-  {
-    name: "에픽",
-  },
-];
 
 export const columns: ColumnDef<ProductType>[] = [
   {

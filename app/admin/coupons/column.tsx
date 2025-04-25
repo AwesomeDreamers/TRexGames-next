@@ -8,16 +8,6 @@ import { CouponType } from "@/type/coupon.type";
 import { format } from "date-fns";
 import { ColumnHeader } from "../../../components/ui/column-header";
 import Actions from "./actions";
-
-export const platforms = [
-  {
-    name: "스팀",
-  },
-  {
-    name: "에픽",
-  },
-];
-
 export const columns: ColumnDef<CouponType>[] = [
   {
     id: "select",

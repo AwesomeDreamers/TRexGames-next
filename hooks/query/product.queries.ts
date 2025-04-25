@@ -5,11 +5,13 @@ import {
   deleteProducts,
   findProductById,
   findProductsAll,
+  findProductsAllForClient,
   updateProduct,
 } from "@/actions/product.actions";
-import { ProductFormType } from "@/type/product.type";
+import { ProductFormType, ProductQueryType } from "@/type/product.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useFilterStore } from "../store/product.store";
 
 export function useFindProductsAll() {
   const query = useQuery({
@@ -95,3 +97,49 @@ export const useDeleteProduct = (id?: number) => {
   });
   return mutation;
 };
+
+export const useClientProducts = () => {
+  const {
+    selectedCategories,
+    selectedPlatforms,
+    priceRange,
+    currentPage,
+    name,
+    sortBy,
+    sortOrder,
+  } = useFilterStore();
+
+  const query = useQuery({
+    queryKey: [
+      "products",
+      {
+        categories: selectedCategories,
+        platforms: selectedPlatforms,
+        priceRange,
+        page: currentPage,
+        sortBy,
+        name,
+        sortOrder,
+      },
+    ],
+    queryFn: ({ queryKey }) => {
+      const [, filters] = queryKey;
+      return findProductsAllForClient({
+        ProductQueryType: filters as unknown as ProductQueryType,
+      });
+    },
+    staleTime: 5000, // Adjust the time (in milliseconds) as needed
+  });
+  return query;
+};
+
+// export function useClientProducts(params: URLSearchParams) {
+//   const query = useQuery({
+//     enabled: !!params,
+//     queryKey: ["products", params.toString()], // params를 queryKey에 포함
+//     queryFn: async () => findProductsAllForClient(params),
+//     retry: 3, // 최대 3번 재시도
+//   });
+
+//   return query;
+// }

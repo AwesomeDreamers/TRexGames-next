@@ -1,6 +1,6 @@
 "use server";
 import { SERVER_URL } from "@/constants/common";
-import { ProductFormType } from "@/type/product.type";
+import { ProductFormType, ProductQueryType } from "@/type/product.type";
 import axios from "axios";
 import { auth } from "../auth";
 
@@ -77,5 +77,56 @@ export async function deleteProduct(id?: number) {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response.data;
+}
+
+// export async function findProductsAllForClient(params: URLSearchParams) {
+//   const url = `${SERVER_URL}/product?${params.toString()}`;
+//   console.log("action Generated URL:", url);
+
+//   const response = await axios.get(url);
+//   return response.data;
+// }
+
+export async function findProductsAllForClient({
+  ProductQueryType,
+}: {
+  ProductQueryType: ProductQueryType;
+}) {
+  const {
+    categories = [],
+    platforms = [],
+    priceRange = [0, 100000],
+    page = 1,
+    sortBy = "createdAt",
+    name = "",
+    sortOrder = "desc",
+  } = ProductQueryType;
+
+  const queryParams = new URLSearchParams();
+
+  if (categories.length > 0) {
+    queryParams.append("categories", categories.join(","));
+  }
+  if (platforms.length > 0) {
+    queryParams.append("platforms", platforms.join(","));
+  }
+  if (priceRange) {
+    queryParams.append("minPrice", priceRange[0].toString());
+    queryParams.append("maxPrice", priceRange[1].toString());
+  }
+  queryParams.append("page", page.toString());
+
+  if (sortBy !== "createdAt" || sortOrder !== "desc") {
+    queryParams.append("sortOrder", sortOrder);
+    queryParams.append("sortBy", sortBy);
+  }
+  if (name) {
+    queryParams.append("name", name);
+  }
+
+  const response = await axios(
+    `${SERVER_URL}/product?${queryParams.toString()}`
+  );
   return response.data;
 }

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { ViewOptions } from "./view-options";
 
 import { Icon } from "@/components/ui/icon";
+import { categories, platforms } from "@/constants/product.contstant";
 import { useConfirm } from "@/hooks/use-confirm";
 import { usePathname } from "next/navigation";
 import { FacetedFilter } from "./faceted-filter";
@@ -18,46 +19,6 @@ interface ToolbarProps<TData> {
   onDelete: (rows: Row<TData>[]) => void;
   disabled?: boolean;
 }
-
-export const categories = [
-  {
-    name: "액션",
-  },
-  {
-    name: "RPG",
-  },
-  {
-    name: "어드벤처",
-  },
-  {
-    name: "FPS",
-  },
-  { name: "캐주얼" },
-  {
-    name: "전략",
-  },
-  {
-    name: "호러",
-  },
-  {
-    name: "서바이벌",
-  },
-  {
-    name: "퍼즐",
-  },
-  {
-    name: "스포츠",
-  },
-];
-
-export const platforms = [
-  {
-    name: "스팀",
-  },
-  {
-    name: "에픽",
-  },
-];
 
 export function Toolbar<TData>({
   table,
