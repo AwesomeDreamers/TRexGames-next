@@ -17,6 +17,15 @@ export type ProductType = z.infer<typeof ProductFormSchema> & {
     id: number;
     url: string;
   }[];
+
+  specs: {
+    cpu: string;
+    gpu: string;
+    ram: string;
+    os: string;
+    storage: string;
+    directX: string;
+  }[];
   numReviews: number;
   createdAt: string;
   updatedAt: string;
@@ -25,9 +34,9 @@ export type ProductType = z.infer<typeof ProductFormSchema> & {
 export type ProductImageType = {
   id: number;
   url: string;
-  productId: number;
-  createdAt: string;
-  updatedAt: string;
+  productId?: number;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type ProductQueryType = {

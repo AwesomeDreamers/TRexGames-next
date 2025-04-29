@@ -3,11 +3,13 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
+  CreditCard,
   Edit2,
   Loader2,
   LogOut,
   LucideProps,
   Icon as LucidIcon,
+  Minus,
   MoreHorizontal,
   Package,
   Plus,
@@ -185,4 +187,6 @@ export const Icon = {
     </svg>
   ),
   filter: SlidersHorizontal,
+  minus: Minus,
+  creditCard: CreditCard,
 };

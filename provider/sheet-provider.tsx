@@ -4,6 +4,9 @@ import { AddBannerSheet } from "@/components/admin/banners/add/add-banner-sheet"
 import { AddCouponSheet } from "@/components/admin/coupons/add/add-coupon-sheet";
 import { AddProductSheet } from "@/components/admin/products/add/add-product-sheet";
 import { EditProductSheet } from "@/components/admin/products/add/edit-product-sheet";
+import FilterDialog from "@/components/products/browse/filter-dialog";
+import { CartSheet } from "@/components/shared/header/cart-sheet";
+import { MenuSheet } from "@/components/shared/header/menu-sheet";
 import { useEffect, useState } from "react";
 
 export default function SheetProvider() {
@@ -17,6 +20,9 @@ export default function SheetProvider() {
       <AddProductSheet />
       <AddCouponSheet />
       <AddBannerSheet />
+      <MenuSheet />
+      <CartSheet />
+      <FilterDialog />
     </>
   );
 }

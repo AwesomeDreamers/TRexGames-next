@@ -1,10 +1,9 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
 import { currencyPrice } from "@/lib/utils";
 import { ProductType } from "@/type/product.type";
 import Image from "next/image";
 import Link from "next/link";
+import CartButton from "./cart-wishlist-button";
 
 interface ProductCardProps {
   product: ProductType;
@@ -75,22 +74,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             </p>
           </div>
         </div>
-        <div className="flex items-center w-full gap-2">
-          <div className="relative group">
-            <Button
-              variant={"outline"}
-              className="relative size-9 flex items-center justify-center"
-            >
-              <Icon.heart className="absolute inset-0 m-auto group-hover:hidden" />
-              <Icon.heartFilled className="absolute inset-0 m-auto hidden group-hover:block text-rose-500" />
-            </Button>
-          </div>
-          <div className="flex-1">
-            <Button variant={"outline"} className="w-full">
-              <Icon.cart /> 장바구니
-            </Button>
-          </div>
-        </div>
+
+        <CartButton productId={product.id} />
       </div>
     </div>
   );

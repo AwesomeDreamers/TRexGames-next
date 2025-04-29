@@ -34,6 +34,8 @@ export default function ProductListPage() {
     setSortBy,
     sortOrder,
     setSortOrder,
+    setName,
+    name,
   } = useFilterStore();
 
   const { onOpen } = useOpenFilterStore();
@@ -48,6 +50,7 @@ export default function ProductListPage() {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = searchParams.get("sortOrder") || "desc";
+    const name = searchParams.get("name") || "";
 
     setSelectedCategories(categories);
     setSelectedPlatforms(platforms);
@@ -55,6 +58,7 @@ export default function ProductListPage() {
     setCurrentPage(page);
     setSortBy(sortBy);
     setSortOrder(sortOrder as "asc" | "desc");
+    setName(name);
   }, [searchParams]);
 
   const updateURL = () => {
@@ -74,6 +78,9 @@ export default function ProductListPage() {
       params.set("sortBy", sortBy);
       params.set("sortOrder", sortOrder);
     }
+    if (name) {
+      params.set("name", name);
+    }
 
     params.set("page", currentPage.toString());
 
@@ -89,6 +96,7 @@ export default function ProductListPage() {
     currentPage,
     sortBy,
     sortOrder,
+    name,
   ]);
 
   const handleSortChange = (value: string) => {
@@ -97,10 +105,6 @@ export default function ProductListPage() {
     setSortOrder(newSortOrder as "asc" | "desc");
     updateURL();
   };
-
-  console.log("sortBy", sortBy);
-  console.log("sortOrder", sortOrder);
-
   return (
     <div className="min-h-screen">
       <div className="relative h-[300px] overflow-hidden">
@@ -110,12 +114,6 @@ export default function ProductListPage() {
           fill
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-black opacity-30 flex items-center justify-center">
-          <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-2">HOT COLLECTION</h1>
-            <p className="text-lg">Discover our latest collection</p>
-          </div>
-        </div>
       </div>
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
