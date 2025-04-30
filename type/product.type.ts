@@ -5,16 +5,16 @@ export type ProductFormType = z.infer<typeof ProductFormSchema>;
 export type ProductType = z.infer<typeof ProductFormSchema> & {
   id: number;
   category: {
-    id: number;
+    id: string;
     name: string;
   };
   platform: {
-    id: number;
+    id: string;
     name: string;
   };
   rating: number;
   images: {
-    id: number;
+    id: string;
     url: string;
   }[];
 
@@ -32,7 +32,7 @@ export type ProductType = z.infer<typeof ProductFormSchema> & {
 };
 
 export type ProductImageType = {
-  id: number;
+  id: string;
   url: string;
   productId?: number;
   createdAt?: string;

@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export type BannerFormType = z.infer<typeof BannerFormSchema>;
 export type BannerType = z.infer<typeof BannerFormSchema> & {
-  id: number;
+  id: string;
   image: {
     url: string;
   };
