@@ -39,12 +39,14 @@ export type ProductImageType = {
   updatedAt?: string;
 };
 
-export type ProductQueryType = {
-  categories?: string[];
-  platforms?: string[];
-  priceRange?: [number, number];
-  page?: number;
+export type ProductFilterType = {
+  categories: string[];
+  platforms: string[];
+  minPrice?: number;
+  maxPrice?: number;
+  page: number;
   sortBy?: string;
-  name?: string;
+  name: string;
   sortOrder?: "asc" | "desc";
+  take: number;
 };

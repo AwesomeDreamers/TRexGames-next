@@ -30,7 +30,7 @@ export function AddProductSheet() {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="lg:max-w-7xl">
+      <SheetContent>
         <div className="p-6">
           <div className="flex flex-col gap-6">
             <SheetHeader className="flex items-center justify-between">
@@ -44,10 +44,10 @@ export function AddProductSheet() {
                   name: "",
                   slug: "",
                   description: "",
-                  price: "0",
+                  price: 0,
                   platformId: "",
                   categoryId: "",
-                  discount: "0",
+                  discount: 0,
                   minSpec: {
                     cpu: "",
                     gpu: "",

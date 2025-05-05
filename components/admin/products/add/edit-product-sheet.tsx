@@ -34,30 +34,26 @@ export function EditProductSheet() {
   }
 
   const minSpec = {
-    cpu: findProductById.data?.specs[0].cpu,
-    gpu: findProductById.data?.specs[0].gpu,
-    ram: findProductById.data?.specs[0]?.ram,
-    storage: findProductById.data?.specs[0]?.storage,
-    directX: findProductById.data?.specs[0]?.directX,
-    os: findProductById.data?.specs[0]?.os,
+    cpu: findProductById.data?.specs[0].cpu ?? "",
+    gpu: findProductById.data?.specs[0].gpu ?? "",
+    ram: findProductById.data?.specs[0]?.ram ?? "",
+    storage: findProductById.data?.specs[0]?.storage ?? "",
+    directX: findProductById.data?.specs[0]?.directX ?? "",
+    os: findProductById.data?.specs[0]?.os ?? "",
   };
 
   const recSpec = {
-    cpu: findProductById.data?.specs[1]?.cpu,
-    gpu: findProductById.data?.specs[1]?.gpu,
-    ram: findProductById.data?.specs[1]?.ram,
-    storage: findProductById.data?.specs[1]?.storage,
-    directX: findProductById.data?.specs[1]?.directX,
-    os: findProductById.data?.specs[1]?.os,
+    cpu: findProductById.data?.specs[1]?.cpu ?? "",
+    gpu: findProductById.data?.specs[1]?.gpu ?? "",
+    ram: findProductById.data?.specs[1]?.ram ?? "",
+    storage: findProductById.data?.specs[1]?.storage ?? "",
+    directX: findProductById.data?.specs[1]?.directX ?? "",
+    os: findProductById.data?.specs[1]?.os ?? "",
   };
 
   const defaultValues = findProductById.data
     ? {
         ...findProductById.data,
-        price: String(findProductById.data.price),
-        platformId: String(findProductById.data.platformId),
-        categoryId: String(findProductById.data.categoryId),
-        discount: String(findProductById.data.discount),
         images: findProductById.data.images.map(
           (image: ProductImageType) => image.url
         ),
@@ -68,10 +64,10 @@ export function EditProductSheet() {
         name: "",
         slug: "",
         description: "",
-        price: "0",
+        price: 0,
         platformId: "",
         categoryId: "",
-        discount: "0",
+        discount: 0,
         minSpec: {
           cpu: "",
           gpu: "",
@@ -92,7 +88,7 @@ export function EditProductSheet() {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="lg:max-w-7xl">
+      <SheetContent>
         <div className="p-6">
           <div className="flex flex-col gap-6">
             <SheetHeader className="flex items-center justify-between">

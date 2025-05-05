@@ -19,10 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+import { categories, platforms } from "@/constants/product.constants";
 import useQuillImageReplacement from "@/hooks/image-replacement";
-import { useFindCategoryAll } from "@/hooks/query/category.queries";
-import { useFindPlatformAll } from "@/hooks/query/platform.queries";
 import { CategoryType } from "@/type/category.type";
 import { PlatformType } from "@/type/platform.type";
 import { ProductFormType } from "@/type/product.type";
@@ -55,11 +53,6 @@ export default function ProductForm({
     defaultValues: defaultValues,
   });
 
-  const { data: CategoryData, isLoading: CategoryLoading } =
-    useFindCategoryAll();
-  const { data: PlatformData, isLoading: PlatformLoading } =
-    useFindPlatformAll();
-
   const handleSubmit = async (values: ProductFormType) => {
     if (images.length > 0) {
       values.images = [...images];
@@ -86,46 +79,46 @@ export default function ProductForm({
       }
     }
   };
-  if (CategoryLoading || PlatformLoading)
-    return (
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
-        <div className="grid grid-cols-2 place-content-center place-items-center gap-4 md:flex md:items-center md:flex-wrap md:place-content-start">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton
-              key={index}
-              id={`skeleton-${index}`}
-              className="w-[150px] h-[100px] md:w-[200px] md:h-[150px] mt-2 flex flex-col items-center justify-center rounded-lg p-12"
-            />
-          ))}
-        </div>
-        <div className="space-y-4">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} id={`skeleton-${index}`}>
-              <Skeleton className="w-16 h-5" />
-              <Skeleton className="mt-1.5 w-full h-9" />
-            </div>
-          ))}
-          <div>
-            <Skeleton className="w-16 h-5" />
-            <Skeleton className="mt-1.5 w-full h-[150px]" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            {Array.from({ length: 2 }).map((_, index) => (
-              <div className="space-y-4" key={index} id={`skeleton-${index}`}>
-                <Skeleton className="mb-4 w-20 h-7" />
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <div key={index} id={`skeleton-${index}`}>
-                    <Skeleton className="w-16 h-5" />
-                    <Skeleton className="mt-1.5 w-full h-9" />
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-          <Skeleton className="mt-1.5 w-full" />
-        </div>
-      </div>
-    );
+  // if (CategoryLoading || PlatformLoading)
+  //   return (
+  //     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
+  //       <div className="grid grid-cols-2 place-content-center place-items-center gap-4 md:flex md:items-center md:flex-wrap md:place-content-start">
+  //         {Array.from({ length: 6 }).map((_, index) => (
+  //           <Skeleton
+  //             key={index}
+  //             id={`skeleton-${index}`}
+  //             className="w-[150px] h-[100px] md:w-[200px] md:h-[150px] mt-2 flex flex-col items-center justify-center rounded-lg p-12"
+  //           />
+  //         ))}
+  //       </div>
+  //       <div className="space-y-4">
+  //         {Array.from({ length: 6 }).map((_, index) => (
+  //           <div key={index} id={`skeleton-${index}`}>
+  //             <Skeleton className="w-16 h-5" />
+  //             <Skeleton className="mt-1.5 w-full h-9" />
+  //           </div>
+  //         ))}
+  //         <div>
+  //           <Skeleton className="w-16 h-5" />
+  //           <Skeleton className="mt-1.5 w-full h-[150px]" />
+  //         </div>
+  //         <div className="grid grid-cols-2 gap-4">
+  //           {Array.from({ length: 2 }).map((_, index) => (
+  //             <div className="space-y-4" key={index} id={`skeleton-${index}`}>
+  //               <Skeleton className="mb-4 w-20 h-7" />
+  //               {Array.from({ length: 6 }).map((_, index) => (
+  //                 <div key={index} id={`skeleton-${index}`}>
+  //                   <Skeleton className="w-16 h-5" />
+  //                   <Skeleton className="mt-1.5 w-full h-9" />
+  //                 </div>
+  //               ))}
+  //             </div>
+  //           ))}
+  //         </div>
+  //         <Skeleton className="mt-1.5 w-full" />
+  //       </div>
+  //     </div>
+  //   );
 
   const { errors } = form.formState;
   console.log("Form errors:", errors);
@@ -236,17 +229,15 @@ export default function ProductForm({
                       </SelectTrigger>
                       {
                         <SelectContent>
-                          {CategoryData.payload.map(
-                            (category: CategoryType) => (
-                              <SelectItem
-                                className="cursor-pointer"
-                                key={category.id}
-                                value={String(category.id)}
-                              >
-                                {category.name}
-                              </SelectItem>
-                            )
-                          )}
+                          {categories.map((category: CategoryType) => (
+                            <SelectItem
+                              className="cursor-pointer"
+                              key={category.id}
+                              value={category.id}
+                            >
+                              {category.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       }
                     </Select>
@@ -272,11 +263,11 @@ export default function ProductForm({
                         <SelectValue placeholder="플랫폼을 선택하세요" />
                       </SelectTrigger>
                       <SelectContent>
-                        {PlatformData.payload.map((platform: PlatformType) => (
+                        {platforms.map((platform: PlatformType) => (
                           <SelectItem
                             className="cursor-pointer"
                             key={platform.id}
-                            value={String(platform.id)}
+                            value={platform.id}
                           >
                             {platform.name}
                           </SelectItem>
@@ -298,7 +289,13 @@ export default function ProductForm({
                 <FormItem>
                   <FormLabel>상품 가격</FormLabel>
                   <FormControl>
-                    <Input type="number" className="mt-1.5" {...field} />
+                    <Input
+                      type="number"
+                      className="mt-1.5"
+                      {...field}
+                      value={Number(field.value)}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -318,6 +315,8 @@ export default function ProductForm({
                       max={100}
                       className="mt-1.5"
                       {...field}
+                      value={Number(field.value)}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
                     />
                   </FormControl>
                   <FormMessage />
@@ -325,7 +324,7 @@ export default function ProductForm({
               )}
             />
           </div>
-          <div className="mb-15">
+          <div>
             <FormField
               control={form.control}
               name="description"
