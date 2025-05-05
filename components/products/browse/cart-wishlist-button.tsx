@@ -29,8 +29,8 @@ export default function CartWishlistButton({
 
   if (cartIsLoading || wishlistIsLoading) null;
 
-  console.log("findCartsAll", findCartsAll);
-  console.log("findWishlistAll", findWishlistAll);
+  // console.log("findCartsAll", findCartsAll);
+  // console.log("findWishlistAll", findWishlistAll);
 
   const handleAddToCart = () => {
     createCart.mutate(1, {
