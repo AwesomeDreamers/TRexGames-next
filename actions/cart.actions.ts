@@ -27,6 +27,17 @@ export async function findCartsAll() {
   return response.data;
 }
 
+export async function findCartCount() {
+  const session = await auth();
+  const token = session?.serverTokens.access_token;
+  const response = await axios.get(`${SERVER_URL}/cart/count`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
 export async function updateCart(cart: CartType) {
   const session = await auth();
   const token = session?.serverTokens.access_token;

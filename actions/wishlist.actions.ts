@@ -30,6 +30,17 @@ export async function findWishlistsAll() {
   return response.data;
 }
 
+export async function findWishlistCount() {
+  const session = await auth();
+  const token = session?.serverTokens.access_token;
+  const response = await axios.get(`${SERVER_URL}/wishlist/count`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
 export async function deleteWishlist(productId: number) {
   const session = await auth();
   const token = session?.serverTokens.access_token;

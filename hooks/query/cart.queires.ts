@@ -1,16 +1,31 @@
 import {
   createCart,
   deleteCart,
+  findCartCount,
   findCartsAll,
   updateCart,
 } from "@/actions/cart.actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 export const useFindCartsAll = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const query = useQuery({
+    enabled: !!userId,
     queryKey: ["carts"],
     queryFn: findCartsAll,
-    retry: 3,
+  });
+  return query;
+};
+
+export const useFindCartCount = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+  const query = useQuery({
+    enabled: !!userId,
+    queryKey: ["carts", "count"],
+    queryFn: findCartCount,
   });
   return query;
 };
