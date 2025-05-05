@@ -12,7 +12,7 @@ import { useDeleteBanner } from "@/hooks/query/banner.queries";
 import { useConfirm } from "@/hooks/use-confirm";
 
 type Props = {
-  id: number;
+  id: string;
 };
 
 export default function Actions({ id }: Props) {
