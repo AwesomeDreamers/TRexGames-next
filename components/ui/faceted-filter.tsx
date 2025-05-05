@@ -19,11 +19,14 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 interface FacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
   options: {
+    id?: string;
     name: string;
   }[];
 }
@@ -35,6 +38,33 @@ export function FacetedFilter<TData, TValue>({
 }: FacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const updateQueryString = (key: string, values: string[]) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (values.length > 0) {
+      params.set(key, values.join(","));
+    } else {
+      params.delete(key);
+    }
+    router.push(`?${params.toString()}`);
+  };
+
+  const resetFilters = (key: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete(key);
+    router.push(`?${params.toString()}`);
+    column?.setFilterValue(undefined);
+  };
+
+  useEffect(() => {
+    const key = column?.id || "";
+    const urlValues = searchParams.get(key)?.split(",") || [];
+    if (urlValues.length > 0) {
+      column?.setFilterValue(urlValues);
+    }
+  }, [column, searchParams]);
 
   return (
     <Popover>
@@ -98,6 +128,7 @@ export function FacetedFilter<TData, TValue>({
                       column?.setFilterValue(
                         filterValues.length ? filterValues : undefined
                       );
+                      updateQueryString(column?.id || "", filterValues);
                     }}
                   >
                     <div
@@ -125,7 +156,7 @@ export function FacetedFilter<TData, TValue>({
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
-                    onSelect={() => column?.setFilterValue(undefined)}
+                    onSelect={() => resetFilters(column?.id || "")}
                     className="justify-center text-center"
                   >
                     필터 초기화

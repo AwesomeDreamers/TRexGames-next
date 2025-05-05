@@ -26,29 +26,37 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Pagination } from "@/components/ui/pagination";
 import { Toolbar } from "@/components/ui/toolbar";
-import { useConfirm } from "@/hooks/use-confirm";
+import { DataTablePagination } from "./data-table-pagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey: string;
+  filters?: {
+    key: string;
+    title: string;
+    options: {
+      id?: string;
+      name: string;
+    }[];
+  }[];
   onDelete: (rows: Row<TData>[]) => void;
-  disabled?: boolean;
+  page: number;
+  take: number;
+  totalCount: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filterKey,
+  filters,
   onDelete,
-  disabled,
+  page,
+  take,
+  totalCount,
 }: DataTableProps<TData, TValue>) {
-  const [ConfirmDialog, confirm] = useConfirm(
-    "정말로 삭제하시겠습니까?",
-    "삭제된 데이터는 복구할 수 없습니다."
-  );
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -84,11 +92,11 @@ export function DataTable<TData, TValue>({
       <Toolbar
         table={table}
         filterKey={filterKey}
+        filters={filters}
         onDelete={onDelete}
-        disabled={disabled}
       />
-      <div className="rounded-md border">
-        <Table>
+      <div className="rounded-md border overflow-x-auto">
+        <Table className="table-auto">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -137,7 +145,12 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <Pagination table={table} />
+      <DataTablePagination
+        table={table}
+        page={page}
+        take={take}
+        totalCount={totalCount}
+      />
     </div>
   );
 }
