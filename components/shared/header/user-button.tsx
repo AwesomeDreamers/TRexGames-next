@@ -6,24 +6,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
-import { useFindCartsAll } from "@/hooks/query/cart.queires";
-import { useFindWishlistAll } from "@/hooks/query/wishlist.queries";
+import { noImage } from "@/constants/common";
+import { useFindCartCount } from "@/hooks/query/cart.queires";
+import { useFindWishlistCount } from "@/hooks/query/wishlist.queries";
 import { useCartStore, useMenuStore } from "@/hooks/store/user.store";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Search from "./search";
 
 export default function UserButton({ session }: { session: Session | null }) {
-  const cart = useFindCartsAll();
-  const wishlist = useFindWishlistAll();
-  const cartCount = cart.data?.payload.length || 0;
-  const wishlistCount = wishlist.data?.payload.length || 0;
+  const cart = useFindCartCount();
+  const wishlist = useFindWishlistCount();
+  const cartCount = cart.data?.payload || 0;
+  const wishlistCount = wishlist.data?.payload || 0;
   const router = useRouter();
   const { onCartOpen } = useCartStore();
   const { onMenuOpen } = useMenuStore();
-  const noImage = "/images/noProfileImage.jpg";
 
   return (
     <div>
@@ -31,7 +32,15 @@ export default function UserButton({ session }: { session: Session | null }) {
         <Search />
         <div
           className="relative cursor-pointer"
-          onClick={() => router.push("/wishlist")}
+          onClick={() => {
+            if (!session || !session.user) {
+              toast.error("로그인 후 이용해주세요.");
+              router.push("/login");
+              return;
+            } else {
+              router.push("/wishlist");
+            }
+          }}
         >
           <Icon.heart className="size-6" />
           <span className="absolute -top-1 -right-1 h-4 w-4 bg-rose-500 text-white text-xs rounded-full flex items-center justify-center">
@@ -67,7 +76,9 @@ export default function UserButton({ session }: { session: Session | null }) {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Icon.user className="size-6" />
+            <div onClick={() => router.push("/login")}>
+              <Icon.user className="size-6" />
+            </div>
           )}
         </div>
       </div>

@@ -6,20 +6,24 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useFindCartsAll } from "@/hooks/query/cart.queires";
+import { useFindCartCount } from "@/hooks/query/cart.queires";
+import { useFindWishlistCount } from "@/hooks/query/wishlist.queries";
 import { useCartStore, useMenuStore } from "@/hooks/store/user.store";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Search from "./search";
 
 export function MenuSheet() {
   const { isMenuOpen, onMenuClose } = useMenuStore();
   const { onCartOpen } = useCartStore();
-  const { data, isLoading } = useFindCartsAll();
+  const router = useRouter();
+  const cart = useFindCartCount();
+  const wishlist = useFindWishlistCount();
   const { data: session } = useSession();
-  const noImage = "/images/noProfileImage.jpg";
-  const userImage = session?.user?.image || noImage;
-  if (isLoading) return null;
-  const cartCount = data?.payload?.length || 0;
+  const cartCount = cart.data?.payload || 0;
+  const wishlistCount = wishlist.data?.payload || 0;
+
   return (
     <Sheet open={isMenuOpen} onOpenChange={onMenuClose}>
       <SheetContent className=" lg:max-w-md">
@@ -45,17 +49,76 @@ export function MenuSheet() {
               <Button
                 variant={"ghost"}
                 className="w-full flex justify-between items-center"
+                onClick={() => {
+                  if (!session || !session.user) {
+                    onMenuClose();
+                    toast.error("로그인 후 이용해주세요.");
+                    router.push("/login");
+                    return;
+                  } else {
+                    onMenuClose();
+                    router.push("/wishlist");
+                  }
+                }}
               >
-                프로필
+                <p>찜 목록</p>
+                <p>{wishlistCount}</p>
               </Button>
               <Button
                 variant={"ghost"}
                 className="w-full flex justify-between items-center"
+                onClick={() => {
+                  if (!session || !session.user) {
+                    onMenuClose();
+                    toast.error("로그인 후 이용해주세요.");
+                    router.push("/login");
+                    return;
+                  } else {
+                    onMenuClose();
+                    router.push("/account");
+                  }
+                }}
               >
-                구매내역
+                내 계정
+              </Button>
+              {session ? (
+                <Button
+                  variant={"ghost"}
+                  className="w-full flex justify-between items-center"
+                  onClick={async () => {
+                    onMenuClose();
+                    await signOut();
+                    router.push("/login");
+                  }}
+                >
+                  로그아웃
+                </Button>
+              ) : (
+                <Button
+                  variant={"ghost"}
+                  className="w-full flex justify-between items-center"
+                  onClick={() => {
+                    onMenuClose();
+                    router.push("/login");
+                  }}
+                >
+                  로그인
+                </Button>
+              )}
+            </div>
+            <p>게임</p>
+            <div className="w-full flex flex-col gap-4">
+              <Button
+                variant={"ghost"}
+                className="w-full flex justify-between items-center"
+                onClick={() => {
+                  onMenuClose();
+                  router.push("/browse");
+                }}
+              >
+                게임 목록
               </Button>
             </div>
-            <p>게임목록</p>
           </div>
         </div>
       </SheetContent>
