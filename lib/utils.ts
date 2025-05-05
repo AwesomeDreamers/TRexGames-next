@@ -7,9 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 
 export function currencyPrice(
   originalPrice: number,
-  discountPercentage: number
+  discountPercentage?: number
 ) {
-  if (discountPercentage <= 0) {
+  if (discountPercentage === undefined || discountPercentage <= 0) {
     const formattedPrice = originalPrice.toLocaleString("ko-KR", {
       style: "currency",
       currency: "KRW",
