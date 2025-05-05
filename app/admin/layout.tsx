@@ -18,7 +18,7 @@ export default function AdminLayout({
       <div
         className={cn(
           "transition-all duration-300",
-          isSidebarOpen ? "ml-64" : "ml-16",
+          isSidebarOpen ? "md:ml-64 ml-0" : "md:ml-16 ml-0",
           "min-h-screen"
         )}
       >

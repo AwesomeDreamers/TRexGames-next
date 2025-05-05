@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { Icon } from "../ui/icon";
 
@@ -46,10 +47,27 @@ export default function AdminSidebar({ isOpen, toggle }: SidebarProps) {
     await signOut();
     router.push("/login");
   }
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1280 && isOpen) {
+        toggle();
+      } else if (window.innerWidth > 1280 && !isOpen) {
+        toggle();
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isOpen, toggle]);
   return (
     <div
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-background transition-all duration-300",
+        "fixed left-0 top-0 z-40 h-screen bg-background transition-all hidden md:block duration-300",
         isOpen ? "w-64" : "w-16",
         "border-r"
       )}
