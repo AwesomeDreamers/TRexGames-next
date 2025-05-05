@@ -30,7 +30,7 @@ export function AddBannerSheet() {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className=" lg:max-w-md">
+      <SheetContent>
         <div className="p-6">
           <div className="flex flex-col gap-6">
             <SheetHeader className="flex items-center justify-between">
@@ -41,8 +41,8 @@ export function AddBannerSheet() {
               disabled={createBanner.isPending}
               defaultValues={{
                 title: "",
-                link: "",
-                image: "",
+                price: 0,
+                url: "",
               }}
             />
           </div>

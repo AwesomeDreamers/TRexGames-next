@@ -27,46 +27,48 @@ interface BannerFormProps {
 }
 
 export default function BannerForm({
-  id,
+  // id,
   defaultValues,
   onSubmit,
   disabled,
 }: BannerFormProps) {
-  const [image, setImage] = useState<string | null>(null);
+  const [images, setImages] = useState<string[]>([]);
   const form = useForm<BannerFormType>({
     resolver: zodResolver(BannerFormSchema),
     defaultValues: defaultValues,
   });
+  // console.log("images", images);
 
   const handleSubmit = async (values: BannerFormType) => {
-    if (!image) {
-      form.setError("image", {
-        type: "custom",
-        message: "이미지를 업로드 해주세요.",
-      });
-      return;
-    }
-    if (image) {
-      values.image = image;
+    // if (!images) {
+    //   form.setError("images", {
+    //     type: "custom",
+    //     message: "이미지를 업로드 해주세요.",
+    //   });
+    //   return;
+    // }
+    if (images.length > 0) {
+      values.images = [...images];
     }
     onSubmit(values);
   };
   const { errors } = form.formState;
   console.log("에러", errors);
 
-  const handleImageRemove = () => {
-    setImage(null);
+  const handleImageRemove = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
-
   const handleImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files) return;
-    const file = files[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      const data = await imageUpload(formData);
-      setImage(data);
+    if (files) {
+      const newImages: string[] = [];
+      for (const file of Array.from(files)) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const data = await imageUpload(formData);
+        newImages.push(data);
+        setImages((prev) => [...prev, ...newImages]);
+      }
     }
   };
 
@@ -77,12 +79,25 @@ export default function BannerForm({
         className="grid gap-6 md:grid-cols-2 lg:grid-cols-1"
       >
         <div className="space-y-4">
-          <div className="grid grid-cols-1 place-content-center place-items-center gap-4 md:flex md:items-center md:flex-wrap md:place-content-start">
-            <Label>배너 이미지</Label>
-            {!image ? (
+          <div className="grid grid-cols-2 place-content-center place-items-center gap-4 md:flex md:items-center md:flex-wrap md:place-content-start">
+            {images.map((image, index) => (
+              <div
+                key={image}
+                className="relative overflow-hidden w-[150px] h-[100px] md:w-[200px] md:h-[150px] mt-2 flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-400 p-12"
+              >
+                <Image
+                  src={image}
+                  alt={`Uploaded ${index}`}
+                  fill
+                  className="object-cover cursor-pointer"
+                  onClick={() => handleImageRemove(index)}
+                />
+              </div>
+            ))}
+            {images.length < 2 && (
               <Label
-                id="image"
-                className="cursor-pointer w-full h-[200px] -mt-2 flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-400 p-12"
+                id="images"
+                className="cursor-pointer w-[150px] h-[100px] md:w-[200px] md:h-[150px] mt-2 flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-400 p-12"
               >
                 <div className="text-center">
                   <Icon.adminUpload className="mx-auto h-12 w-12 text-gray-400" />
@@ -90,7 +105,7 @@ export default function BannerForm({
                     <span>클릭하여 업로드</span>
                     <input
                       type="file"
-                      id={"image"}
+                      id={"images"}
                       accept="image/*"
                       className="sr-only"
                       onChange={handleImagesChange}
@@ -98,16 +113,6 @@ export default function BannerForm({
                   </div>
                 </div>
               </Label>
-            ) : (
-              <div className="relative overflow-hidden -mt-2 w-full h-[200px] not-visited:flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-400 p-12">
-                <Image
-                  src={image || ""}
-                  alt={`Uploaded Banner`}
-                  fill
-                  className="object-cover cursor-pointer"
-                  onClick={() => handleImageRemove()}
-                />
-              </div>
             )}
           </div>
           <div>
@@ -118,7 +123,11 @@ export default function BannerForm({
                 <FormItem className="flex flex-col">
                   <FormLabel>배너이름</FormLabel>
                   <FormControl>
-                    <Input placeholder="배너이름" {...field} />
+                    <Input
+                      placeholder="배너이름"
+                      className="mt-1.5"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -128,12 +137,33 @@ export default function BannerForm({
           <div>
             <FormField
               control={form.control}
-              name="link"
+              name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>링크</FormLabel>
+                  <FormLabel>상품 가격</FormLabel>
                   <FormControl>
-                    <Input placeholder="링크" {...field} />
+                    <Input
+                      type="number"
+                      className="mt-1.5"
+                      {...field}
+                      value={Number(field.value)}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div>
+            <FormField
+              control={form.control}
+              name="url"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>URL</FormLabel>
+                  <FormControl>
+                    <Input placeholder="URL" className="mt-1.5" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
