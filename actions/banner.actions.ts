@@ -20,13 +20,23 @@ export async function createBanner(values: BannerFormType) {
   return { status, message, payload };
 }
 
-export async function findBannersAll() {
-  const response = await axios.get(`${SERVER_URL}/banner/all`, {});
+export async function findBannersAll(filter: {
+  page: number;
+  take: number;
+  title: string;
+}) {
+  const params = new URLSearchParams();
+  params.set("page", filter.page.toString());
+  params.set("take", filter.take.toString());
+  if (filter.title) params.set("title", filter.title);
+  const response = await axios.get(
+    `${SERVER_URL}/banner/all?${params.toString()}`
+  );
   const { status, message, payload } = response.data;
   return { status, message, payload };
 }
 
-export async function deleteBanners(ids: number[]) {
+export async function deleteBanners(ids: string[]) {
   const session = await auth();
   const token = session?.serverTokens.access_token;
   const response = await axios.delete(`${SERVER_URL}/banner/delete`, {
@@ -39,7 +49,7 @@ export async function deleteBanners(ids: number[]) {
   return { status, message, payload };
 }
 
-export async function deleteBanner(id?: number) {
+export async function deleteBanner(id?: string) {
   const session = await auth();
   const token = session?.serverTokens.access_token;
   const response = await axios.delete(`${SERVER_URL}/banner/delete/${id}`, {

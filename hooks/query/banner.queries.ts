@@ -7,10 +7,14 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function useFindBannersAll() {
+export function useFindBannersAll(params: {
+  page: number;
+  take: number;
+  title: string;
+}) {
   const query = useQuery({
-    queryKey: ["banners"],
-    queryFn: findBannersAll,
+    queryKey: ["banners", params],
+    queryFn: () => findBannersAll(params),
   });
   return query;
 }
@@ -20,7 +24,10 @@ export function useCreateBanner() {
   const mutation = useMutation({
     mutationFn: createBanner,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["banners"] });
+      queryClient.invalidateQueries({
+        queryKey: ["banners"],
+        refetchType: "active",
+      });
     },
   });
 
@@ -30,7 +37,7 @@ export function useCreateBanner() {
 export const useDeleteBanners = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: async (ids: number[]) => {
+    mutationFn: async (ids: string[]) => {
       const response = await deleteBanners(ids);
       return response;
     },
@@ -41,7 +48,7 @@ export const useDeleteBanners = () => {
   return mutation;
 };
 
-export const useDeleteBanner = (id?: number) => {
+export const useDeleteBanner = (id?: string) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async () => {
