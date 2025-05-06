@@ -16,7 +16,8 @@ export async function addWishlist(productId: number) {
       },
     }
   );
-  return response.data;
+  const { status, message, payload } = response.data;
+  return { status, message, payload };
 }
 
 export async function findWishlistsAll() {
@@ -27,7 +28,8 @@ export async function findWishlistsAll() {
       Authorization: `Bearer ${token}`,
     },
   });
-  return response.data;
+  const { status, message, payload } = response.data;
+  return { status, message, payload };
 }
 
 export async function findWishlistCount() {
@@ -38,7 +40,8 @@ export async function findWishlistCount() {
       Authorization: `Bearer ${token}`,
     },
   });
-  return response.data;
+  const { status, message, payload } = response.data;
+  return { status, message, payload };
 }
 
 export async function deleteWishlist(productId: number) {
@@ -50,5 +53,6 @@ export async function deleteWishlist(productId: number) {
     },
     data: { productId },
   });
-  return response.data;
+  const { status, message, payload } = response.data;
+  return { status, message, payload };
 }

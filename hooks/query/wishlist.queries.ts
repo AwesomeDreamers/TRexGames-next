@@ -29,10 +29,10 @@ export const useFindWishlistCount = () => {
   return query;
 };
 
-export const useAddWishlist = (productId: number) => {
+export const useAddWishlist = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: () => addWishlist(productId),
+    mutationFn: (productId: number) => addWishlist(productId),
     mutationKey: ["wishlist"],
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -43,10 +43,10 @@ export const useAddWishlist = (productId: number) => {
   return mutation;
 };
 
-export const useDeleteWishlist = (productId: number) => {
+export const useDeleteWishlist = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: () => deleteWishlist(productId),
+    mutationFn: (productId: number) => deleteWishlist(productId),
     mutationKey: ["wishlist"],
     onSuccess: () => {
       queryClient.invalidateQueries({
