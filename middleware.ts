@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 import { auth } from "./auth";
 
-const protectedPaths = ["/user"];
-const adminPaths = ["/admin", "/admin/:path*"];
+const protectedPaths = [
+  "/account",
+  "/cart",
+  "/checkout",
+  "/payments",
+  "/wishlist",
+];
+const adminPaths = ["/admin"];
 const publicRoutes = ["/login", "/signup", "/reset-password"];
 
 export default auth((req) => {
