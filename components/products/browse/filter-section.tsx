@@ -1,64 +1,104 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { categories, platforms } from "@/constants/product.contstant";
-import { useFilterStore } from "@/hooks/store/product.store";
+import { categories, platforms } from "@/constants/product.constants";
 import { currencyPrice } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function FilterSection() {
-  const {
-    selectedCategories,
-    selectedPlatforms,
-    setSelectedCategories,
-    setSelectedPlatforms,
-    priceRange,
-    setPriceRange,
-  } = useFilterStore();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [localPriceRange, setLocalPriceRange] =
-    useState<[number, number]>(priceRange);
+  const searchParamsArr = (key: string): string[] => {
+    const param = searchParams.get(key);
+    if (param === null) {
+      return [];
+    }
+    return param.split(",").filter((item) => item !== "");
+  };
+
+  const currentCategories = searchParamsArr("categories");
+  const currentPlatforms = searchParamsArr("platforms");
+
+  const currentMinPrice = parseInt(searchParams.get("minPrice") || "0", 10);
+  const currentMaxPrice = parseInt(
+    searchParams.get("maxPrice") || "100000",
+    10
+  );
+  const currentName = searchParams.get("name") || "";
+
+  const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([
+    currentMinPrice,
+    currentMaxPrice,
+  ]);
 
   useEffect(() => {
-    setLocalPriceRange(priceRange);
-  }, [priceRange]);
+    setLocalPriceRange([currentMinPrice, currentMaxPrice]);
+  }, [currentMinPrice, currentMaxPrice]);
 
   const handleToggleFilter = (
     filterType: "categories" | "platforms",
     value: string
   ) => {
-    const setterMap = {
-      categories: setSelectedCategories,
-      platforms: setSelectedPlatforms,
-    };
+    const currentItems =
+      filterType === "categories" ? currentCategories : currentPlatforms;
 
-    const currentState =
-      filterType === "categories" ? selectedCategories : selectedPlatforms;
+    const newItems = currentItems.includes(value)
+      ? currentItems.filter((item) => item !== value)
+      : [...currentItems, value];
 
-    const newState = currentState.includes(value)
-      ? currentState.filter((item) => item !== value)
-      : [...currentState, value];
+    const params = new URLSearchParams(searchParams.toString());
 
-    setterMap[filterType](newState);
+    if (newItems.length > 0) {
+      params.set(filterType, newItems.join(","));
+    } else {
+      params.delete(filterType);
+    }
+    params.set("page", "1");
+
+    router.push(`/browse?${params.toString()}`);
   };
 
-  const defaultCategories: string[] = [];
-  const defaultPlatforms: string[] = [];
+  const handlePriceRangeCommit = (value: [number, number]) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("minPrice", value[0].toString());
+    params.set("maxPrice", value[1].toString());
+    params.set("page", "1");
+
+    router.push(`/browse?${params.toString()}`);
+  };
+
   const defaultPriceRange: [number, number] = [0, 100000];
 
   const resetFilters = () => {
-    setSelectedCategories(defaultCategories);
-    setSelectedPlatforms(defaultPlatforms);
-    setPriceRange(defaultPriceRange);
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.delete("categories");
+    params.delete("platforms");
+    if (
+      currentMinPrice !== defaultPriceRange[0] ||
+      currentMaxPrice !== defaultPriceRange[1]
+    ) {
+      params.delete("minPrice");
+      params.delete("maxPrice");
+    }
+    params.delete("name");
+    params.set("page", "1");
+
+    router.push(`/browse?${params.toString()}`);
     setLocalPriceRange(defaultPriceRange);
   };
 
   const isFilterChanged =
-    selectedCategories.length > 0 ||
-    selectedPlatforms.length > 0 ||
-    priceRange[0] !== defaultPriceRange[0] ||
-    priceRange[1] !== defaultPriceRange[1];
+    currentCategories.length > 0 ||
+    currentPlatforms.length > 0 ||
+    currentMinPrice !== defaultPriceRange[0] ||
+    currentMaxPrice !== defaultPriceRange[1] ||
+    currentName !== "";
 
   return (
     <div className="space-y-6">
@@ -77,7 +117,7 @@ export default function FilterSection() {
             <div key={category.name} className="flex items-center">
               <Checkbox
                 id={category.name}
-                checked={selectedCategories.includes(category.name)}
+                checked={currentCategories?.includes(category.name)}
                 onCheckedChange={() =>
                   handleToggleFilter("categories", category.name)
                 }
@@ -95,7 +135,7 @@ export default function FilterSection() {
           <div key={platform.name} className="flex items-center">
             <Checkbox
               id={platform.name}
-              checked={selectedPlatforms.includes(platform.name)}
+              checked={currentPlatforms?.includes(platform.name)}
               onCheckedChange={() =>
                 handleToggleFilter("platforms", platform.name)
               }
@@ -114,14 +154,14 @@ export default function FilterSection() {
             setLocalPriceRange([value[0], value[1]] as [number, number])
           }
           onValueCommit={(value) =>
-            setPriceRange([value[0], value[1]] as [number, number])
+            handlePriceRangeCommit([value[0], value[1]] as [number, number])
           }
           max={100000}
           step={1}
           className="w-full"
         />
         <div className="flex justify-between mt-2 text-sm">
-          <span>{currencyPrice(localPriceRange[0], 0)}</span>
+          <span>{currencyPrice(localPriceRange[0], 0)}</span>{" "}
           <span>{currencyPrice(localPriceRange[1], 0)}</span>
         </div>
       </div>
