@@ -3,14 +3,14 @@ import { ProductType } from "@/type/product.type";
 import { notFound, redirect } from "next/navigation";
 
 interface PageProps {
-  params: { id: number };
-  searchParams: any;
+  params: Promise<{ id: number }>;
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
   const response = await findProductById(id);
-  const product: ProductType = response.payload;
+  const product: ProductType = response?.payload;
   if (!product) notFound();
   redirect(`/browse/${id}/${encodeURIComponent(product.slug)}`);
 }
