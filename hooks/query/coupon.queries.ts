@@ -30,7 +30,7 @@ export function useCreateCoupon() {
 export const useDeleteCoupons = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: async (ids: number[]) => {
+    mutationFn: async (ids: string[]) => {
       const response = await deleteCoupons(ids);
       return response;
     },
@@ -41,7 +41,7 @@ export const useDeleteCoupons = () => {
   return mutation;
 };
 
-export const useDeleteCoupon = (id?: number) => {
+export const useDeleteCoupon = (id?: string) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async () => {

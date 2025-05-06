@@ -37,7 +37,7 @@ export async function findCouponsAll() {
   return { status, message, payload };
 }
 
-export async function deleteCoupons(ids: number[]) {
+export async function deleteCoupons(ids: string[]) {
   const session = await auth();
   const token = session?.serverTokens.access_token;
   const response = await axios.delete(`${SERVER_URL}/coupon/deletes`, {
@@ -50,7 +50,7 @@ export async function deleteCoupons(ids: number[]) {
   return { status, message, payload };
 }
 
-export async function deleteCoupon(id?: number) {
+export async function deleteCoupon(id?: string) {
   const session = await auth();
   const token = session?.serverTokens.access_token;
   const response = await axios.delete(`${SERVER_URL}/coupon/delete/${id}`, {
