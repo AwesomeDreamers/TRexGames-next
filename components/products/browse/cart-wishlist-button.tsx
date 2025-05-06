@@ -1,15 +1,15 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { useCreateCart, useFindCartsAll } from "@/hooks/query/cart.queires";
+import { useCreateCart } from "@/hooks/query/cart.queires";
 import {
   useAddWishlist,
   useDeleteWishlist,
   useFindWishlistAll,
 } from "@/hooks/query/wishlist.queries";
 import { useCartStore } from "@/hooks/store/user.store";
-import { CartType } from "@/type/cart.type";
 import { WishlistType } from "@/type/wishlist.type";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export default function CartWishlistButton({
@@ -19,66 +19,49 @@ export default function CartWishlistButton({
 }) {
   const { onCartOpen } = useCartStore();
   const createCart = useCreateCart(productId);
-  const addWishlist = useAddWishlist(productId);
-  const deleteWishlist = useDeleteWishlist(productId);
-  const { data: cartData, isLoading: cartIsLoading } = useFindCartsAll();
-  const { data: wishlistData, isLoading: wishlistIsLoading } =
-    useFindWishlistAll();
-  const findCartsAll = cartData?.payload || [];
+  const addWishlist = useAddWishlist();
+  const deleteWishlist = useDeleteWishlist();
+  const { data: wishlistData } = useFindWishlistAll();
   const findWishlistAll = wishlistData?.payload || [];
 
-  if (cartIsLoading || wishlistIsLoading) null;
-
-  // console.log("findCartsAll", findCartsAll);
-  // console.log("findWishlistAll", findWishlistAll);
+  const [isInWishlist, setIsInWishlist] = useState(
+    findWishlistAll.some(
+      (wishlist: WishlistType) => wishlist.productId === productId
+    )
+  );
 
   const handleAddToCart = () => {
     createCart.mutate(1, {
-      onSuccess: () => {
-        if (
-          findCartsAll.some((cart: CartType) => cart.productId === productId)
-        ) {
-          toast.success("이미 장바구니에 담긴 상품입니다.");
-        } else {
-          toast.success("장바구니에 추가되었습니다.");
-        }
-        onCartOpen();
-      },
-      onError: () => {
-        toast.error("장바구니에 추가하는데 실패했습니다.");
-      },
+      onSuccess: () => onCartOpen(),
     });
   };
 
   const handleToggleWishlist = () => {
-    const isInWishlist = findWishlistAll.some(
-      (wishlist: WishlistType) => wishlist.productId === productId
-    );
+    const previousState = isInWishlist;
+    setIsInWishlist(!isInWishlist);
 
     if (isInWishlist) {
-      deleteWishlist.mutate(undefined, {
+      deleteWishlist.mutate(productId, {
+        onError: () => {
+          setIsInWishlist(previousState);
+          toast.error("찜 목록에서 제거하는데 실패했습니다.");
+        },
         onSuccess: () => {
           toast.success("찜 목록에서 제거되었습니다.");
         },
-        onError: () => {
-          toast.error("찜 목록에서 제거하는데 실패했습니다.");
-        },
       });
     } else {
-      addWishlist.mutate(undefined, {
+      addWishlist.mutate(productId, {
+        onError: () => {
+          setIsInWishlist(previousState);
+          toast.error("찜 목록에 추가하는데 실패했습니다.");
+        },
         onSuccess: () => {
           toast.success("찜 목록에 추가되었습니다.");
-        },
-        onError: () => {
-          toast.error("찜 목록에 추가하는데 실패했습니다.");
         },
       });
     }
   };
-
-  const isInWishlist = findWishlistAll.some(
-    (wishlist: WishlistType) => wishlist.productId === productId
-  );
 
   return (
     <div className="flex items-center w-full gap-2">
