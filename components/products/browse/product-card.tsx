@@ -3,7 +3,7 @@ import { currencyPrice } from "@/lib/utils";
 import { ProductType } from "@/type/product.type";
 import Image from "next/image";
 import Link from "next/link";
-import CartButton from "./cart-wishlist-button";
+import CartWishlistButton from "./cart-wishlist-button";
 
 interface ProductCardProps {
   product: ProductType;
@@ -11,9 +11,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <div className=" max-w-3xs md:max-w-sm rounded relative w-full">
+    <div className="max-w-3xs md:max-w-3xs rounded relative w-full">
       <Link href={`browse/${product.id}/${product.slug}`}>
-        <div className="relative w-full h-[46vh] group">
+        <div className="relative w-full h-[42vh] md:h-[35vh] group">
           <Image
             src={product.images?.[0]?.url!}
             alt={product.name}
@@ -48,7 +48,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex gap-4 items-center justify-between py-2">
           <div className="flex flex-row gap-2 items-center">
             <p className="text-base text-white font-bold">
-              {currencyPrice(Number(product.price), Number(product.discount))}
+              {currencyPrice(product.price, product.discount)}
             </p>
           </div>
           <div className="flex flex-row gap-2 items-center">
@@ -75,7 +75,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
 
-        <CartButton productId={product.id} />
+        <CartWishlistButton productId={product.id} />
       </div>
     </div>
   );
