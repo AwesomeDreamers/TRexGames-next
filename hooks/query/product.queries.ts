@@ -1,25 +1,19 @@
 "use client";
 import {
   createProduct,
+  deleteManyProducts,
   deleteProduct,
-  deleteProducts,
   findProductById,
   findProductsAll,
-  findProductsAllForClient,
   updateProduct,
 } from "@/actions/product.actions";
-import { ProductFormType, ProductQueryType } from "@/type/product.type";
+import {
+  ProductFilterType,
+  ProductFormType,
+  ProductType,
+} from "@/type/product.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useFilterStore } from "../store/product.store";
-
-export function useFindProductsAll() {
-  const query = useQuery({
-    queryKey: ["products"],
-    queryFn: findProductsAll,
-  });
-  return query;
-}
 
 export function useCreateProduct() {
   const queryClient = useQueryClient();
@@ -33,8 +27,16 @@ export function useCreateProduct() {
   return mutation;
 }
 
-export const useFindProductById = (id?: number) => {
+export function useFindProductsAll(filterOptions: ProductFilterType) {
   const query = useQuery({
+    queryKey: ["products", filterOptions],
+    queryFn: () => findProductsAll(filterOptions),
+  });
+  return query;
+}
+
+export const useFindProductById = (id?: number) => {
+  const query = useQuery<ProductType>({
     enabled: !!id,
     queryKey: ["product", { id }],
     queryFn: async () => {
@@ -56,6 +58,12 @@ export const useUpdateProduct = (id?: number) => {
       queryClient.invalidateQueries({
         queryKey: ["product", { id }],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["products"],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["products"],
+      });
     },
   });
   return mutation;
@@ -65,7 +73,7 @@ export const useDeleteProducts = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (ids: number[]) => {
-      const response = await deleteProducts(ids);
+      const response = await deleteManyProducts(ids);
       return response;
     },
     onSuccess: () => {
@@ -97,49 +105,3 @@ export const useDeleteProduct = (id?: number) => {
   });
   return mutation;
 };
-
-export const useClientProducts = () => {
-  const {
-    selectedCategories,
-    selectedPlatforms,
-    priceRange,
-    currentPage,
-    name,
-    sortBy,
-    sortOrder,
-  } = useFilterStore();
-
-  const query = useQuery({
-    queryKey: [
-      "products",
-      {
-        categories: selectedCategories,
-        platforms: selectedPlatforms,
-        priceRange,
-        page: currentPage,
-        sortBy,
-        name,
-        sortOrder,
-      },
-    ],
-    queryFn: ({ queryKey }) => {
-      const [, filters] = queryKey;
-      return findProductsAllForClient({
-        ProductQueryType: filters as unknown as ProductQueryType,
-      });
-    },
-    staleTime: 5000, // Adjust the time (in milliseconds) as needed
-  });
-  return query;
-};
-
-// export function useClientProducts(params: URLSearchParams) {
-//   const query = useQuery({
-//     enabled: !!params,
-//     queryKey: ["products", params.toString()], // params를 queryKey에 포함
-//     queryFn: async () => findProductsAllForClient(params),
-//     retry: 3, // 최대 3번 재시도
-//   });
-
-//   return query;
-// }
