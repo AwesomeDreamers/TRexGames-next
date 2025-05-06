@@ -12,6 +12,8 @@ import {
   Minus,
   MoreHorizontal,
   Package,
+  Pause,
+  Play,
   Plus,
   SlidersHorizontal,
   Trash2,
@@ -189,4 +191,6 @@ export const Icon = {
   filter: SlidersHorizontal,
   minus: Minus,
   creditCard: CreditCard,
+  pause: Pause,
+  play: Play,
 };

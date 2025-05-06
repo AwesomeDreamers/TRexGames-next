@@ -61,7 +61,7 @@ export default function AdminCouponPage() {
             onDelete={(row) => {
               const ids = row
                 .map((r) => r.original.id)
-                .filter((id): id is number => id !== undefined);
+                .filter((id): id is string => id !== undefined);
               deleteCoupons.mutate(ids, {
                 onSuccess: (data) => {
                   toast.success(data?.message);
