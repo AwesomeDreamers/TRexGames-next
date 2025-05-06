@@ -5,7 +5,12 @@ import { CartItemType } from "@/type/cart.type";
 import { useEffect, useState } from "react";
 import { Icon } from "./icon";
 
-export default function QtyButton({ item }: { item: CartItemType }) {
+interface Props {
+  item: CartItemType;
+  onQuantityChange?: (quantity: number) => void;
+}
+
+export default function QtyButton({ item, onQuantityChange }: Props) {
   const [quantity, setQuantity] = useState(item.quantity || 1);
   const updateCart = useUpdateCart(item.productId);
 
@@ -15,7 +20,16 @@ export default function QtyButton({ item }: { item: CartItemType }) {
 
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity < 1) return;
-    updateCart.mutate(newQuantity);
+
+    const previousQuantity = quantity;
+    setQuantity(newQuantity);
+    onQuantityChange?.(newQuantity);
+
+    updateCart.mutate(newQuantity, {
+      onError: () => {
+        setQuantity(previousQuantity);
+      },
+    });
   };
 
   return (
@@ -26,11 +40,7 @@ export default function QtyButton({ item }: { item: CartItemType }) {
       <button
         className="size-7 flex items-center justify-center border-none cursor-pointer hover:bg-[#505052]"
         style={{ transition: "all 0.3 ease" }}
-        onClick={() => {
-          const newQuantity = quantity - 1;
-          setQuantity(newQuantity);
-          handleQuantityChange(newQuantity);
-        }}
+        onClick={() => handleQuantityChange(quantity - 1)}
         disabled={quantity <= 1}
       >
         <Icon.minus className="size-4" />
@@ -41,11 +51,7 @@ export default function QtyButton({ item }: { item: CartItemType }) {
       <button
         className="size-7 flex items-center justify-center border-none cursor-pointer hover:bg-[#505052]"
         style={{ transition: "all 0.3 ease" }}
-        onClick={() => {
-          const newQuantity = quantity + 1;
-          setQuantity(newQuantity);
-          handleQuantityChange(newQuantity);
-        }}
+        onClick={() => handleQuantityChange(quantity + 1)}
       >
         <Icon.adminAddProduct className="size-4" />
       </button>
