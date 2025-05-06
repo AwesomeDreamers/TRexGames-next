@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ProductImageType, ProductType } from "@/type/product.type";
 import { useState } from "react";
 import ProductImages from "./product-images";
+import ProductReviewList from "./product-review-list";
 
 type Tabs = "spec" | "images" | "review";
 
@@ -55,11 +56,11 @@ export default function ProductDetailTab({
           >
             사양 정보
           </p>
-          <div className="flex flex-col items-center justify-between+ gap-10 mt-5 mb-4">
-            <div>
+          <div className="flex flex-col items-center justify-between gap-10 mt-5 mb-4">
+            <div className="w-full">
               <h2 className="mb-4">최소사양</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border p-4 rounded-md">
-                <div className="col-span-1 space-y-4">
+                <div className="hidden md:block md:col-span-1 space-y-4">
                   <p>운영체제</p>
                   <p>프로세서</p>
                   <p>그래픽</p>
@@ -67,7 +68,7 @@ export default function ProductDetailTab({
                   <p>저장공간</p>
                   <p>다이렉트 X</p>
                 </div>
-                <div className="col-span-3 space-y-4">
+                <div className="col-span-4 md:col-span-3 space-y-4">
                   <p>{product.specs[0].os}</p>
                   <p>{product.specs[0].cpu}</p>
                   <p>{product.specs[0].gpu}</p>
@@ -77,10 +78,10 @@ export default function ProductDetailTab({
                 </div>
               </div>
             </div>
-            <div>
+            <div className="w-full">
               <h2 className="mb-4">권장사양</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border p-4 rounded-md">
-                <div className="col-span-1 space-y-4">
+              <div className="grid grid-cols-4 gap-4 border p-4 rounded-md">
+                <div className="hidden md:block md:col-span-1 space-y-4">
                   <p>운영체제</p>
                   <p>프로세서</p>
                   <p>그래픽</p>
@@ -88,7 +89,7 @@ export default function ProductDetailTab({
                   <p>저장공간</p>
                   <p>다이렉트 X</p>
                 </div>
-                <div className="col-span-3 space-y-4">
+                <div className="col-span-4 md:col-span-3 space-y-4">
                   <p>{product.specs[1].os}</p>
                   <p>{product.specs[1].cpu}</p>
                   <p>{product.specs[1].gpu}</p>
@@ -105,6 +106,12 @@ export default function ProductDetailTab({
       {tab === "images" && (
         <div className="flex items-center justify-center mt-10">
           <ProductImages images={images} />
+        </div>
+      )}
+
+      {tab === "review" && (
+        <div className="flex items-center justify-center mt-10">
+          <ProductReviewList productId={product.id} />
         </div>
       )}
     </>
