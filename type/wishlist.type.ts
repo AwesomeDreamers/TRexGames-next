@@ -1,8 +1,9 @@
 import { ProductType } from "./product.type";
 
 export type WishlistType = {
-  userId: string;
+  id: string;
+  userId?: string;
   productId: number;
   product: ProductType;
-  createdAt: string;
+  createdAt?: string;
 };

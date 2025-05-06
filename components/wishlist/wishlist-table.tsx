@@ -14,6 +14,7 @@ import WishlistTableRow from "./wishlist-table-row";
 const WishlistTable = () => {
   const { data, isLoading } = useFindWishlistAll();
   const findWishlistsAll = data?.payload || [];
+  console.log("findWishlistsAll", findWishlistsAll);
 
   if (isLoading) return null;
 
@@ -47,8 +48,8 @@ const WishlistTable = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                findWishlistsAll.map((items: WishlistType) => (
-                  <WishlistTableRow key={items.product.id} items={items} />
+                findWishlistsAll.map((item: WishlistType) => (
+                  <WishlistTableRow key={item.id} item={item} />
                 ))
               )}
             </TableBody>
