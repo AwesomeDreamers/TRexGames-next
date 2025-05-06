@@ -7,6 +7,7 @@ import {
 } from "@/actions/cart.actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 export const useFindCartsAll = () => {
   const { data: session } = useSession();
@@ -35,10 +36,18 @@ export const useCreateCart = (productId: number) => {
   const mutation = useMutation({
     mutationFn: async (quantity: number) => createCart({ productId, quantity }),
     mutationKey: ["cart"],
-    onSuccess: () => {
+    onSuccess: (data) => {
+      toast.success(data.message);
       queryClient.invalidateQueries({
         queryKey: ["carts"],
       });
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("장바구니 추가에 실패했습니다.");
+      }
     },
   });
   return mutation;
