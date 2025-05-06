@@ -25,13 +25,14 @@ export default async function Page({
 
   return (
     <section className="max-w-[720px] mx-auto mt-10 mb-10 px-5 md:px-0">
-      <div className="grid grid-cols-2 md:grid-cols-4">
-        <div className="col-span-2 place-items-center">
+      <div className="grid grid-cols-1 md:grid-cols-4">
+        <div className="col-span-2 place-items-center mx-auto">
           <Image
             src={product.images[0].url}
             width={260}
             height={243}
             alt={`${product.name}`}
+            className="rounded-lg object-cover"
           />
         </div>
         <div className="col-span-2 p-5">
@@ -43,6 +44,7 @@ export default async function Page({
             <ProductRating
               className="w-35 h-auto"
               value={product.rating}
+              labelHidden
               readOnly
             />
             <p>{product.numReviews} 리뷰</p>
@@ -77,7 +79,7 @@ export default async function Page({
           <div className="flex items-center justify-center">
             <div
               dangerouslySetInnerHTML={{
-                __html: product.description.replace(/"/g, ""),
+                __html: product.description,
               }}
             />
           </div>
