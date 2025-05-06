@@ -12,7 +12,7 @@ export default function FilterDialog() {
   const { isOpen, onClose } = useOpenFilterStore();
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-[90vw] max-h-[600px] overflow-auto max-w-[400px]">
+      <DialogContent className="w-[90vw] max-h-[800px] overflow-auto max-w-[400px]">
         <DialogHeader>
           <DialogTitle>필터</DialogTitle>
         </DialogHeader>
