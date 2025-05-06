@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { categories, platforms } from "@/constants/product.contstant";
+import { categories, platforms } from "@/constants/product.constants";
 import { currencyPrice } from "@/lib/utils";
 import { ProductType } from "@/type/product.type";
 import { ColumnHeader } from "../../../components/ui/column-header";
@@ -104,8 +104,8 @@ export const columns: ColumnDef<ProductType>[] = [
     accessorKey: "price",
     header: ({ column }) => <ColumnHeader column={column} title="가격" />,
     cell: ({ row }) => {
-      const price = parseInt(row.original.price);
-      const discount = parseInt(row.original.discount || "0");
+      const price = row.original.price;
+      const discount = row.original.discount || 0;
       return (
         <div className="flex items-center">
           <span>{currencyPrice(price, discount)}</span>
@@ -120,7 +120,7 @@ export const columns: ColumnDef<ProductType>[] = [
     accessorKey: "discount",
     header: ({ column }) => <ColumnHeader column={column} title="할인율" />,
     cell: ({ row }) => {
-      const discount = parseInt(row.original.discount || "0");
+      const discount = row.original.discount || 0;
       return (
         <div className="flex items-center">
           <span>{discount}%</span>
