@@ -6,14 +6,21 @@ import { auth } from "../auth";
 
 export async function createProduct(values: ProductFormType) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.post(`${SERVER_URL}/product/create`, values, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.post(`${SERVER_URL}/product/create`, values, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function findProductsAll(productFilter: ProductFilterType) {
@@ -34,50 +41,79 @@ export async function findProductsAll(productFilter: ProductFilterType) {
   if (productFilter.sortOrder) params.set("sortOrder", productFilter.sortOrder);
   if (productFilter.name) params.set("name", productFilter.name);
 
-  const response = await axios(
-    `${SERVER_URL}/product/all?${params.toString()}`
-  );
-  return response.data;
+  try {
+    const response = await axios(
+      `${SERVER_URL}/product/all?${params.toString()}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function findProductById(id?: number) {
   const response = await axios.get(`${SERVER_URL}/product/${id}`);
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  return response.data;
 }
 
 export async function updateProduct(values: ProductFormType, id?: number) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.put(`${SERVER_URL}/product/${id}`, values, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.put(`${SERVER_URL}/product/${id}`, values, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function deleteManyProducts(ids: number[]) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.delete(`${SERVER_URL}/product/delete-many`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    data: ids,
-  });
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.delete(`${SERVER_URL}/product/delete-many`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: ids,
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function deleteProduct(id?: number) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.delete(`${SERVER_URL}/product/delete/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.delete(`${SERVER_URL}/product/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }

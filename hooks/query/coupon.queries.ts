@@ -1,7 +1,7 @@
 import {
   createCoupon,
   deleteCoupon,
-  deleteCoupons,
+  deleteManyCoupons,
   findCouponsAll,
 } from "@/actions/coupon.actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -31,7 +31,7 @@ export const useDeleteCoupons = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (ids: string[]) => {
-      const response = await deleteCoupons(ids);
+      const response = await deleteManyCoupons(ids);
       return response;
     },
     onSuccess: () => {

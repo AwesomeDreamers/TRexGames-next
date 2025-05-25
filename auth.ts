@@ -8,15 +8,19 @@ import { SERVER_URL } from "./constants/common";
 
 async function refreshToken(token: JWT): Promise<JWT> {
   try {
-    const response = await axios.get(`${SERVER_URL}/auth/refresh`, {
-      headers: {
-        authorization: `Refresh ${token.serverTokens.refresh_token}`,
-      },
-    });
+    const response = await axios.post(
+      `${SERVER_URL}/auth/refresh`,
+      {},
+      {
+        headers: {
+          authorization: `Refresh ${token.serverTokens.refreshToken}`,
+        },
+      }
+    );
 
     console.log("refrershed");
 
-    const newRefreshToken = await response.data;
+    const newRefreshToken = response.data.body;
 
     return {
       ...token,
@@ -61,7 +65,7 @@ export const config = {
           email,
           password,
         });
-        const user = await response.data;
+        const user = await response.data.body;
         return user;
       },
     }),
@@ -79,10 +83,10 @@ export const config = {
         };
 
         const response = await axios.post(
-          `${SERVER_URL}/auth/kakao-login`,
+          `${SERVER_URL}/auth/social-login`,
           user
         );
-        const result = await response.data;
+        const result = await response.data.body;
         return result;
       },
     }),
@@ -100,10 +104,10 @@ export const config = {
         };
 
         const response = await axios.post(
-          `${SERVER_URL}/auth/google-login`,
+          `${SERVER_URL}/auth/social-login`,
           user
         );
-        const result = await response.data;
+        const result = await response.data.body;
         result.id = user.id;
         return result;
       },
@@ -114,7 +118,7 @@ export const config = {
       if (user) return { ...token, ...user };
       if (
         token.serverTokens &&
-        new Date().getTime() > token.serverTokens.expiresIn
+        new Date().getTime() > token.serverTokens.expiresIn - 5000
       ) {
         token = await refreshToken(token);
       }

@@ -27,10 +27,18 @@ export const sendEmail = async (email: string, type: "signup" | "reset") => {
     type === "signup"
       ? `${SERVER_URL}/auth/send-signup-email`
       : `${SERVER_URL}/auth/send-reset-password-email`;
-  const response = await axios.post(url, {
-    email,
-  });
-  return response.data;
+  try {
+    const response = await axios.post(url, {
+      email,
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 };
 
 export const signup = async (value: SignupFormType) => {
@@ -55,12 +63,20 @@ export const signup = async (value: SignupFormType) => {
 export const resetPassword = async (value: ResetPasswordFormType) => {
   const data = ResetPasswordFormSchema.parse(value);
   const { email, token, password } = data;
-  const response = await axios.post(`${SERVER_URL}/auth/reset-password`, {
-    email,
-    token,
-    password,
-  });
-  return response.data;
+  try {
+    const response = await axios.post(`${SERVER_URL}/auth/reset-password`, {
+      email,
+      token,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 };
 
 export async function checkVerifyToken(token: string) {

@@ -15,7 +15,7 @@ export default async function Page({
 }) {
   const { id, slug } = await params;
   const response = await findProductById(id);
-  const product: ProductType = response.payload;
+  const product: ProductType = response.body;
   if (!product) notFound();
   const currentURL = `/browse/${id}/${slug}`;
   const targetURL = `/browse/${id}/${encodeURIComponent(product.slug)}`;

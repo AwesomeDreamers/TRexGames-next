@@ -3,21 +3,19 @@ import {
   findPopularProductsAll,
   findSwiperBannersAll,
 } from "@/actions/home.actions";
+import { auth } from "@/auth";
 import Carousel from "@/components/home/carousel";
 import GenreCarousel from "@/components/home/genre-carousel";
 import ProductsList from "@/components/home/products-list";
+import { getQueryClient } from "@/provider/get-query-client";
 // import Caroucel from "@/components/home/caroucel";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export const latestProductsQueryKey = ["products", "latest"];
 export const popularProductsQueryKey = ["products", "popular"];
 
 export default async function Home() {
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ["banners"],
@@ -33,6 +31,9 @@ export default async function Home() {
     }),
   ]);
   const state = dehydrate(queryClient);
+
+  const session = await auth();
+  console.log(session);
 
   return (
     <HydrationBoundary state={state}>

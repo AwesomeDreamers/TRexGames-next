@@ -11,15 +11,21 @@ import axios from "axios";
 
 export async function CreatePayment(values: CreatePaymentType) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-
-  const response = await axios.post(`${SERVER_URL}/payment/create`, values, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.post(`${SERVER_URL}/payment/create`, values, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function requestPayment({
@@ -28,7 +34,7 @@ export async function requestPayment({
   amount,
 }: PaymentRequestType) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
+  const token = session?.serverTokens.accessToken;
   try {
     const { data: payment } = await axios.post<PaymentResponseType>(
       `https://api.tosspayments.com/v1/payments/confirm`,
@@ -46,7 +52,7 @@ export async function requestPayment({
       }
     );
     if (payment) {
-      const updatePayment = await axios.put(
+      await axios.put(
         `${SERVER_URL}/payment/update`,
         {
           orderId,
@@ -70,8 +76,6 @@ export async function requestPayment({
           },
         }
       );
-      const { payload } = updatePayment.data;
-      return payload;
     }
   } catch (error: any) {
     if (error.code === "ERR_BAD_REQUEST") {

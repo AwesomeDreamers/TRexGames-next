@@ -19,7 +19,7 @@ export default function ProductsList({ queryKey }: Props) {
     queryKey: queryKey,
     queryFn: fetchFn,
   });
-  const products: ProductType[] = data?.payload || [];
+  const products: ProductType[] = data?.body || [];
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {products.map((item) => (

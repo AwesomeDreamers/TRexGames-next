@@ -21,7 +21,7 @@ export default function Carousel() {
   }, []);
 
   const { data } = useFindSwiperBannersAll();
-  const banners: BannerType[] = data?.payload || [];
+  const banners: BannerType[] = data?.body || [];
 
   return (
     <section className="flex flex-col lg:flex-row w-full h-auto mt-8">

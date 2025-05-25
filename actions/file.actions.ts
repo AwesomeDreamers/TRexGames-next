@@ -6,13 +6,21 @@ import { auth } from "./../auth";
 
 export async function imageUpload(formData: FormData) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.post(`${SERVER_URL}/file/image`, formData, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.post(`${SERVER_URL}/file/image`, formData, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function changePathContentImage(data: {
@@ -20,19 +28,27 @@ export async function changePathContentImage(data: {
   slug: string;
 }) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
+  const token = session?.serverTokens.accessToken;
   console.log("업로드할 파일:", data.urls);
   console.log("업로드할 파일 개수:", data.urls.length);
   console.log("slug:", data.slug);
 
-  const response = await axios.post(
-    `${SERVER_URL}/file/content/image-path`,
-    data,
-    {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
+  try {
+    const response = await axios.post(
+      `${SERVER_URL}/file/content/image-path`,
+      data,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
     }
-  );
-  return response.data;
+    throw error;
+  }
 }

@@ -8,16 +8,22 @@ import axios from "axios";
 
 export async function createBanner(values: BannerFormType) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
+  const token = session?.serverTokens.accessToken;
   const data = BannerFormSchema.parse(values);
-
-  const response = await axios.post(`${SERVER_URL}/banner/create`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  try {
+    const response = await axios.post(`${SERVER_URL}/banner/create`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function findBannersAll(filter: {
@@ -29,33 +35,55 @@ export async function findBannersAll(filter: {
   params.set("page", filter.page.toString());
   params.set("take", filter.take.toString());
   if (filter.title) params.set("title", filter.title);
-  const response = await axios.get(
-    `${SERVER_URL}/banner/all?${params.toString()}`
-  );
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  try {
+    const response = await axios.get(
+      `${SERVER_URL}/banner/all?${params.toString()}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function deleteBanners(ids: string[]) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.delete(`${SERVER_URL}/banner/delete`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    data: ids,
-  });
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.delete(`${SERVER_URL}/banner/delete`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: ids,
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function deleteBanner(id?: string) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.delete(`${SERVER_URL}/banner/delete/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.delete(`${SERVER_URL}/banner/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }

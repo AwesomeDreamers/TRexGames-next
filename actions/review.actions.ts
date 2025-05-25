@@ -6,35 +6,56 @@ import { auth } from "../auth";
 
 export async function createReview(values: ReviewFormType) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.post(`${SERVER_URL}/review/create`, values, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.post(`${SERVER_URL}/review/create`, values, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function findReviewsAll() {
-  const response = await axios.get(`${SERVER_URL}/review/all`);
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  try {
+    const response = await axios.get(`${SERVER_URL}/review/all`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function findReviewByProductIdAndUserId(productId?: number) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.get(
-    `${SERVER_URL}/review/user-id/product-id/${productId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.get(
+      `${SERVER_URL}/review/user-id/product-id/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
     }
-  );
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+    throw error;
+  }
 }
 
 export async function findReviewsByProductId(filters: ReviewFilterType) {
@@ -51,38 +72,60 @@ export async function findReviewsByProductId(filters: ReviewFilterType) {
     params.append("sortOrder", sortOrder);
     params.append("sortBy", sortBy);
   }
-  const response = await axios.get(
-    `${SERVER_URL}/review/product-id/${productId}?${params.toString()}`
-  );
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+  try {
+    const response = await axios.get(
+      `${SERVER_URL}/review/product-id/${productId}?${params.toString()}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
+    }
+    throw error;
+  }
 }
 
 export async function updateReview(values: ReviewFormType, id?: string) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.put(
-    `${SERVER_URL}/review/update/${id}`,
-    values,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.put(
+      `${SERVER_URL}/review/update/${id}`,
+      values,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
     }
-  );
-  const { status, message, payload } = response.data;
-  return { status, message, payload };
+    throw error;
+  }
 }
 export async function deleteReview(productId?: number) {
   const session = await auth();
-  const token = session?.serverTokens.access_token;
-  const response = await axios.delete(
-    `${SERVER_URL}/product/delete/${productId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const token = session?.serverTokens.accessToken;
+  try {
+    const response = await axios.delete(
+      `${SERVER_URL}/product/delete/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message;
+      throw new Error(message);
     }
-  );
-  return response.data;
+    throw error;
+  }
 }

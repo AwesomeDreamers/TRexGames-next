@@ -2,19 +2,14 @@
 
 import { auth } from "@/auth";
 import { SERVER_URL } from "@/constants/common";
-import { CouponFormType } from "@/type/coupon.type";
+import { UserType } from "@/type/user.type";
 import axios from "axios";
 
-export async function createCoupon(values: CouponFormType) {
+export async function findUsersAll() {
   const session = await auth();
   const token = session?.serverTokens.accessToken;
-  const data = {
-    ...values,
-    usageLimit: Number(values.usageLimit),
-    discount: Number(values.discount),
-  };
   try {
-    const response = await axios.post(`${SERVER_URL}/coupon/create`, data, {
+    const response = await axios.get(`${SERVER_URL}/user/all`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -29,11 +24,11 @@ export async function createCoupon(values: CouponFormType) {
   }
 }
 
-export async function findCouponsAll() {
+export async function findUserByUserId() {
   const session = await auth();
   const token = session?.serverTokens.accessToken;
   try {
-    const response = await axios.get(`${SERVER_URL}/coupon/all`, {
+    const response = await axios.get(`${SERVER_URL}/user/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -48,15 +43,14 @@ export async function findCouponsAll() {
   }
 }
 
-export async function deleteManyCoupons(ids: string[]) {
+export async function updateUser(values: UserType) {
   const session = await auth();
   const token = session?.serverTokens.accessToken;
   try {
-    const response = await axios.delete(`${SERVER_URL}/coupon/deletes`, {
+    const response = await axios.put(`${SERVER_URL}/user/upadte`, values, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: ids,
     });
     return response.data;
   } catch (error) {
@@ -68,11 +62,11 @@ export async function deleteManyCoupons(ids: string[]) {
   }
 }
 
-export async function deleteCoupon(id?: string) {
+export async function deleteUser() {
   const session = await auth();
   const token = session?.serverTokens.accessToken;
   try {
-    const response = await axios.delete(`${SERVER_URL}/coupon/delete/${id}`, {
+    const response = await axios.delete(`${SERVER_URL}/user/delete`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

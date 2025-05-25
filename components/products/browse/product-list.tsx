@@ -14,8 +14,8 @@ interface Props {
 
 export default function ProductList({ page, take, params }: Props) {
   const { data } = useFindProductsAll(params);
-  const products: ProductType[] = data?.payload.products || [];
-  const totalCount: number = data?.payload.totalCount || 0;
+  const products: ProductType[] = data?.body.products || [];
+  const totalCount: number = data?.body.totalCount || 0;
   const { isLoading: wishlistIsLoading } = useFindWishlistAll();
 
   if (wishlistIsLoading)
