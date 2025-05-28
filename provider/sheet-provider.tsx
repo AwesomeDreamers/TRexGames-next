@@ -5,6 +5,7 @@ import { AddBannerSheet } from "@/components/admin/banners/add/add-banner-sheet"
 import { AddCouponSheet } from "@/components/admin/coupons/add/add-coupon-sheet";
 import { AddProductSheet } from "@/components/admin/products/add/add-product-sheet";
 import { EditProductSheet } from "@/components/admin/products/add/edit-product-sheet";
+import { EditUserSheet } from "@/components/admin/users/edit-user-sheet";
 import FilterDialog from "@/components/products/browse/filter-dialog";
 import { AddReviewSheet } from "@/components/review/add-review-sheet";
 import { EditReviewSheet } from "@/components/review/edit-review-sheet";
@@ -29,6 +30,7 @@ export default function SheetProvider() {
       <OrderDetailDialog />
       <AddReviewSheet />
       <EditReviewSheet />
+      <EditUserSheet />
     </>
   );
 }

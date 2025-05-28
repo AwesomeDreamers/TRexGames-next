@@ -45,7 +45,7 @@ export async function findProductsAll(productFilter: ProductFilterType) {
     const response = await axios(
       `${SERVER_URL}/product/all?${params.toString()}`
     );
-    return response.data;
+    return response.data.body;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message;

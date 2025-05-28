@@ -18,8 +18,8 @@ interface Props {
 
 export default function BannersList({ params }: Props) {
   const { data, isLoading } = useFindBannersAll(params);
-  const findBannersAll = data?.payload.banners;
-  const totalCount = data?.payload.totalCount;
+  const findBannersAll = data?.banners;
+  const totalCount = data?.totalCount;
   const deleteBanners = useDeleteBanners();
   const handleDelete = (rows: { original: { id?: string } }[]) => {
     const ids = rows

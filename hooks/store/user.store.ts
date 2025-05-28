@@ -23,3 +23,17 @@ export const useMenuStore = create<MenuState>((set) => ({
   onMenuOpen: () => set({ isMenuOpen: true }),
   onMenuClose: () => set({ isMenuOpen: false }),
 }));
+
+type OpenUserState = {
+  id?: string;
+  isOpen: boolean;
+  onOpen: (id?: string) => void;
+  onClose: () => void;
+};
+
+export const useOpenUserStore = create<OpenUserState>((set) => ({
+  id: undefined,
+  isOpen: false,
+  onOpen: (id) => set({ id, isOpen: true }),
+  onClose: () => set({ isOpen: false, id: undefined }),
+}));

@@ -14,6 +14,16 @@ interface SidebarProps {
 
 const menuItems = [
   {
+    name: "대시보드",
+    icon: Icon.adminDashboard,
+    href: "/admin/dashboard",
+  },
+  {
+    name: "회원",
+    icon: Icon.adminUsers,
+    href: "/admin/users",
+  },
+  {
     name: "상품",
     icon: Icon.adminProducts,
     href: "/admin/products",

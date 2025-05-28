@@ -31,15 +31,22 @@ export async function findBannersAll(filter: {
   take: number;
   title: string;
 }) {
+  const session = await auth();
+  const token = session?.serverTokens.accessToken;
   const params = new URLSearchParams();
   params.set("page", filter.page.toString());
   params.set("take", filter.take.toString());
   if (filter.title) params.set("title", filter.title);
   try {
     const response = await axios.get(
-      `${SERVER_URL}/banner/all?${params.toString()}`
+      `${SERVER_URL}/banner/all?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
-    return response.data;
+    return response.data.body;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message;

@@ -19,7 +19,7 @@ export async function createCoupon(values: CouponFormType) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data.body;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message;
@@ -38,7 +38,7 @@ export async function findCouponsAll() {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data.body;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message;
@@ -58,7 +58,7 @@ export async function deleteManyCoupons(ids: string[]) {
       },
       data: ids,
     });
-    return response.data;
+    return response.data.body;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message;

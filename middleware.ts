@@ -7,6 +7,7 @@ const protectedPaths = [
   "/checkout",
   "/payments",
   "/wishlist",
+  "/user",
 ];
 const adminPaths = ["/admin"];
 const publicRoutes = ["/login", "/signup", "/reset-password"];

@@ -72,3 +72,16 @@ export const ChangePasswordFormSchema = z
       });
     }
   });
+
+export const UserFormSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: "이름은 2글자 이상이어야 합니다.",
+    })
+    .trim(),
+  image: z.string().optional(),
+  role: z.enum(["USER", "ADMIN"], {
+    errorMap: () => ({ message: "권한을 선택하세요." }),
+  }),
+});
