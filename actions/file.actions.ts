@@ -13,7 +13,7 @@ export async function imageUpload(formData: FormData) {
         authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data.body;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message;
@@ -43,7 +43,7 @@ export async function changePathContentImage(data: {
         },
       }
     );
-    return response.data;
+    return response.data.body;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message;

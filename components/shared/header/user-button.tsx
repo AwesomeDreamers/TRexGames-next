@@ -68,6 +68,9 @@ export default function UserButton({ session }: { session: Session | null }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => router.push("/account")}>
+                  구매내역
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/user")}>
                   내 계정
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={async () => await signOut()}>

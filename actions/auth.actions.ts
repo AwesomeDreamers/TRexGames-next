@@ -83,7 +83,7 @@ export async function checkVerifyToken(token: string) {
   const response = await axios.get(`${SERVER_URL}/auth/verify-token`, {
     params: { token },
   });
-  return response.data;
+  return response.data.body;
 }
 
 export async function login(value: LoginFormType) {

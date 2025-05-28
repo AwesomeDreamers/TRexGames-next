@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ProfileFormSchema = z.object({
+export const UserInfoChangeFormSchema = z.object({
   name: z
     .string()
     .min(2, {
@@ -34,6 +34,41 @@ export const ResetPasswordFormSchema = z
         code: z.ZodIssueCode.custom,
         message: "비밀번호가 일치하지 않습니다.",
         path: ["confirmPassword"],
+      });
+    }
+  });
+
+export const ChangePasswordFormSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "비밀번호는 8글자 이상이어야 합니다." })
+      .regex(/[a-zA-Z]/, { message: "비밀번호는 알파벳이 포함되어야 합니다." })
+      .regex(/[0-9]/, { message: "비밀번호는 숫자가 포함되어야 합니다." })
+      .regex(/[^a-zA-Z0-9]/, {
+        message: "비밀번호는 특수문자가 포함되어야 합니다.",
+      })
+      .trim(),
+    newPassword: z
+      .string()
+      .min(8, { message: "비밀번호는 8글자 이상이어야 합니다." })
+      .regex(/[a-zA-Z]/, { message: "비밀번호는 알파벳이 포함되어야 합니다." })
+      .regex(/[0-9]/, { message: "비밀번호는 숫자가 포함되어야 합니다." })
+      .regex(/[^a-zA-Z0-9]/, {
+        message: "비밀번호는 특수문자가 포함되어야 합니다.",
+      })
+      .trim(),
+    confirmNewPassword: z
+      .string()
+      .min(1, { message: "비밀번호를 재입력하세요." })
+      .trim(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.newPassword !== data.confirmNewPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "비밀번호가 일치하지 않습니다.",
+        path: ["confirmNewPassword"],
       });
     }
   });

@@ -1,11 +1,12 @@
 "use client";
 import {
+  changePassword,
   deleteUser,
   findUserByUserId,
   findUsersAll,
   updateUser,
 } from "@/actions/user.actions";
-import { UserType } from "@/type/user.type";
+import { ChangePasswordFormType, UserType } from "@/type/user.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -28,7 +29,7 @@ export const useFindUserByUserId = (id: string) => {
 export const useUpdateUser = (id: string) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationKey: ["user"],
+    mutationKey: ["user", { id }],
     mutationFn: async (values: UserType) => updateUser(values),
     onSuccess: (data) => {
       toast.success(data.message);
@@ -43,10 +44,29 @@ export const useUpdateUser = (id: string) => {
   return mutation;
 };
 
+export const useChangePassword = (id: string) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ["user", { id }],
+    mutationFn: async (values: ChangePasswordFormType) =>
+      changePassword(values),
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries({
+        queryKey: ["user", { id }],
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  return mutation;
+};
+
 export const useDeleteUser = (id: string) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationKey: ["user"],
+    mutationKey: ["user", { id }],
     mutationFn: deleteUser,
     onSuccess: (data) => {
       toast.success(data.message);
@@ -55,7 +75,8 @@ export const useDeleteUser = (id: string) => {
       });
     },
     onError: (error) => {
-      toast.error(error as any);
+      toast.error(error.message);
     },
   });
+  return mutation;
 };
