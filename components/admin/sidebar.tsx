@@ -1,11 +1,21 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { Button } from "../ui/button";
 import { Icon } from "../ui/icon";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "../ui/sidebar";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -43,80 +53,75 @@ const menuItems = [
     icon: Icon.adminBanners,
     href: "/admin/banners",
   },
-  {
-    name: "로그아웃",
-    icon: Icon.adminLogout,
-    href: "",
-  },
 ];
 
-export default function AdminSidebar({ isOpen, toggle }: SidebarProps) {
+export default function AdminSidebar({ session }: { session: Session | null }) {
   const router = useRouter();
 
   async function handleLogout() {
     await signOut();
     router.push("/login");
   }
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 1280 && isOpen) {
-        toggle();
-      } else if (window.innerWidth > 1280 && !isOpen) {
-        toggle();
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [isOpen, toggle]);
   return (
-    <div
-      className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-background transition-all hidden md:block duration-300",
-        isOpen ? "w-64" : "w-16",
-        "border-r"
-      )}
-    >
-      <div className="flex h-16 items-center justify-between px-4">
-        <h1 className={cn("font-semibold", !isOpen && "hidden")}>
-          T-Rex Games Admin
-        </h1>
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          className="ml-auto"
-          onClick={toggle}
-        >
-          {isOpen ? (
-            <Icon.chevronLeft className="size-4" />
-          ) : (
-            <Icon.chevronRight className="size-4" />
-          )}
-        </Button>
-      </div>
-      <div className="space-y-1 py-4">
-        {menuItems.map((item) => (
-          <div
-            onClick={
-              item.name === "Logout"
-                ? handleLogout
-                : () => router.push(item.href)
-            }
-            key={item.name}
-            className={cn(
-              "flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
-            )}
-          >
-            <item.icon className="size-4" />
-            <span className={cn("ml-3", !isOpen && "hidden")}>{item.name}</span>
-          </div>
-        ))}
-      </div>
-    </div>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="bg-background text-accent-foreground"></SidebarHeader>
+      <SidebarContent className="bg-background text-accent-foreground">
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-accent-foreground">
+            어드민 메뉴
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {menuItems.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.href}>
+                      <item.icon />
+                      <span>{item.name}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   );
 }
+
+//   <div className="flex h-16 items-center justify-between px-4">
+//     <h1 className={cn("font-semibold", !isOpen && "hidden")}>
+//       T-Rex Games Admin
+//     </h1>
+//     <Button
+//       variant={"ghost"}
+//       size={"icon"}
+//       className="ml-auto"
+//       onClick={toggle}
+//     >
+//       {isOpen ? (
+//         <Icon.chevronLeft className="size-4" />
+//       ) : (
+//         <Icon.chevronRight className="size-4" />
+//       )}
+//     </Button>
+//   </div>
+//   <div className="space-y-1 py-4">
+//     {menuItems.map((item) => (
+//       <div
+//         onClick={
+//           item.name === "Logout"
+//             ? handleLogout
+//             : () => router.push(item.href)
+//         }
+//         key={item.name}
+//         className={cn(
+//           "flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+//         )}
+//       >
+//         <item.icon className="size-4" />
+//         <span className={cn("ml-3", !isOpen && "hidden")}>{item.name}</span>
+//       </div>
+//     ))}
+//   </div>

@@ -1,29 +1,24 @@
-"use client";
+import { auth } from "@/auth";
+import AdminHeader from "@/components/admin/header";
 import AdminSidebar from "@/components/admin/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const session = await auth();
   return (
-    <div className="min-h-screen bg-background">
-      <AdminSidebar
-        isOpen={isSidebarOpen}
-        toggle={() => setIsSidebarOpen(!isSidebarOpen)}
-      />
-      <div
-        className={cn(
-          "transition-all duration-300",
-          isSidebarOpen ? "md:ml-64 ml-0" : "md:ml-16 ml-0",
-          "min-h-screen"
-        )}
-      >
-        {children}
-      </div>
+    <div className="min-h-screen">
+      <SidebarProvider>
+        <AdminSidebar session={session} />
+        <div className={cn("transition-all duration-300 min-h-screen w-full")}>
+          <AdminHeader session={session} />
+          {children}
+        </div>
+      </SidebarProvider>
     </div>
   );
 }
